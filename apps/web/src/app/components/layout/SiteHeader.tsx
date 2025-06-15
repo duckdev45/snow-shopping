@@ -1,0 +1,47 @@
+import Link from "next/link";
+import Image from "next/image";
+
+export function SiteHeader() {
+    const logoSrc = "/snowShopping.png";
+
+    return (
+        <header className="bg-black backdrop-blur-lg sticky top-0 z-50 shadow-sm">
+            <nav className="container mx-auto px-4 lg:px-6 py-3">
+                <div className="flex justify-between items-center">
+                    <Link href="/" className="flex items-center space-x-2">
+                        <Image src={logoSrc} alt="雪拼Logo" width={80} height={40} className="h-20 w-auto" />
+                    </Link>
+
+                    <div className="hidden lg:flex items-center space-x-6">
+                        <Link href="/browse" className="text-white hover:text-blue-600 transition-colors">瀏覽裝備</Link>
+                        <Link href="/about" className="text-white hover:text-blue-600 transition-colors">關於我們</Link>
+                    </div>
+
+                    <div className="flex items-center space-x-2">
+                        <Link href="/login" className="hidden sm:inline-block px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-full transition-colors">登入</Link>
+                        <Link href="/register" className="px-4 py-2 text-sm font-medium text-white bg-gray-800 hover:bg-gray-900 rounded-full transition-colors">註冊</Link>
+                        <button className="hidden md:flex items-center ml-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 rounded-full transition-colors shadow-md">
+                            <PlusIcon className="mr-2 h-4 w-4" />
+                            免費刊登
+                        </button>
+                        <button className="lg:hidden p-2 rounded-md hover:bg-gray-100">
+                            <MenuIcon className="h-6 w-6" />
+                        </button>
+                    </div>
+                </div>
+            </nav>
+        </header>
+    );
+}
+
+function PlusIcon(props: React.SVGProps<SVGSVGElement>) {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+    )
+}
+
+function MenuIcon(props: React.SVGProps<SVGSVGElement>) {
+    return (
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}><line x1="4" x2="20" y1="12" y2="12"/><line x1="4" x2="20" y1="6" y2="6"/><line x1="4" x2="20" y1="18" y2="18"/></svg>
+    )
+}
