@@ -6,9 +6,9 @@ export default function HomePage() {
     return (
         <>
             <HeroSection />
-            {/*<CategoriesSection />*/}
-            {/*<LatestListingsSection />*/}
-            {/*<CallToActionSection />*/}
+            <CategoriesSection />
+            <LatestListingsSection />
+            <CallToActionSection />
         </>
     );
 }
