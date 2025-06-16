@@ -36,7 +36,7 @@ const categories = [
     },
     {
         name: '雪衣雪褲',
-        emoji: '🧥',
+        emoji: '🦺',
         href: '/browse?category=apparel'
     },
     {
@@ -51,7 +51,7 @@ const categories = [
     },
     {
         name: '雪鞋',
-        emoji: '👟',
+        emoji: '🥾',
         href: '/browse?category=boots'
     }
 ];
@@ -82,12 +82,12 @@ function CategoriesSection() {
                                         children: category.emoji
                                     }, void 0, false, {
                                         fileName: "[project]/apps/web/src/app/components/home/CategoriesSection.tsx",
-                                        lineNumber: 21,
+                                        lineNumber: 23,
                                         columnNumber: 33
                                     }, this)
                                 }, void 0, false, {
                                     fileName: "[project]/apps/web/src/app/components/home/CategoriesSection.tsx",
-                                    lineNumber: 20,
+                                    lineNumber: 21,
                                     columnNumber: 29
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$15$2e$3$2e$3_react$2d$dom$40$19$2e$1$2e$0_react$40$19$2e$1$2e$0_$5f$react$40$19$2e$1$2e$0$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
@@ -95,7 +95,7 @@ function CategoriesSection() {
                                     children: category.name
                                 }, void 0, false, {
                                     fileName: "[project]/apps/web/src/app/components/home/CategoriesSection.tsx",
-                                    lineNumber: 23,
+                                    lineNumber: 25,
                                     columnNumber: 29
                                 }, this)
                             ]
@@ -134,7 +134,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$ne
 ;
 function HeroSection() {
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$15$2e$3$2e$3_react$2d$dom$40$19$2e$1$2e$0_react$40$19$2e$1$2e$0_$5f$react$40$19$2e$1$2e$0$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("section", {
-        className: "hero-bg relative text-white",
+        className: "hero-bg min-h-screen w-full relative flex justify-center items-center text-white",
         children: [
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$15$2e$3$2e$3_react$2d$dom$40$19$2e$1$2e$0_react$40$19$2e$1$2e$0_$5f$react$40$19$2e$1$2e$0$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
                 className: "absolute inset-0 bg-black/50"
@@ -169,7 +169,7 @@ function HeroSection() {
                             children: [
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$15$2e$3$2e$3_react$2d$dom$40$19$2e$1$2e$0_react$40$19$2e$1$2e$0_$5f$react$40$19$2e$1$2e$0$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
                                     type: "search",
-                                    placeholder: "試試搜尋 Burton Custom、Oakley 雪鏡...",
+                                    placeholder: "search...",
                                     className: "w-full pl-5 pr-32 py-4 border-none rounded-full bg-white/90 text-gray-800 placeholder-gray-500 focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all text-lg"
                                 }, void 0, false, {
                                     fileName: "[project]/apps/web/src/app/components/home/HeroSection.tsx",
@@ -177,11 +177,11 @@ function HeroSection() {
                                     columnNumber: 25
                                 }, this),
                                 /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f2e$pnpm$2f$next$40$15$2e$3$2e$3_react$2d$dom$40$19$2e$1$2e$0_react$40$19$2e$1$2e$0_$5f$react$40$19$2e$1$2e$0$2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$rsc$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$rsc$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                    className: "absolute right-2 top-1/2 -translate-y-1/2 px-6 py-2.5 text-base font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-full transition-colors shadow-lg",
+                                    className: "absolute right-2 top-1/2 -translate-y-1/2 px-6 py-2.5 text-base font-semibold text-white bg-blue-400 hover:bg-green-600 rounded-full transition-colors shadow-lg",
                                     children: "搜尋"
                                 }, void 0, false, {
                                     fileName: "[project]/apps/web/src/app/components/home/HeroSection.tsx",
-                                    lineNumber: 11,
+                                    lineNumber: 12,
                                     columnNumber: 25
                                 }, this)
                             ]
@@ -364,28 +364,28 @@ const sampleProducts = [
         name: 'Burton Custom 2023 公分板',
         category: '單板 Snowboard',
         price: 8500,
-        imageUrl: 'https://placehold.co/400x300/e2e8f0/334155?text=Burton+Custom'
+        imageUrl: '/'
     },
     {
         id: '2',
         name: '[全新] Oakley Flight Deck M 雪鏡',
         category: '雪鏡 Goggle',
         price: 4200,
-        imageUrl: 'https://placehold.co/400x300/e2e8f0/334155?text=Oakley+Goggles'
+        imageUrl: '/'
     },
     {
         id: '3',
         name: '二手 Burton Ion 雪鞋 9.5號',
         category: '雪鞋 Boots',
         price: 6000,
-        imageUrl: 'https://placehold.co/400x300/e2e8f0/334155?text=Burton+Ion'
+        imageUrl: '/'
     },
     {
         id: '4',
         name: 'Volcom 雪衣外套 L號 女款',
         category: '雪衣雪褲 Apparel',
         price: 3800,
-        imageUrl: 'https://placehold.co/400x300/e2e8f0/334155?text=Volcom+Jacket'
+        imageUrl: '/'
     }
 ];
 function LatestListingsSection() {
