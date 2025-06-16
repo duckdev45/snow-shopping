@@ -1,15 +1,1 @@
-{
-  "app": {
-    "[project]/apps/web/src/app/_not-found/page": [
-      "static/media/_nF7OG829Oofr2wohFbTp9i1OCEKIfVZ1w-s.p.a0b8d18b.woff2",
-      "static/media/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw-s.p.0faac26c.woff2"
-    ],
-    "[project]/apps/web/src/app/page": [
-      "static/media/_nF7OG829Oofr2wohFbTp9i1OCEKIfVZ1w-s.p.a0b8d18b.woff2",
-      "static/media/UcC73FwrK3iLTeHuS_nVMrMxCp50SjIa1ZL7W0Q5nw-s.p.0faac26c.woff2"
-    ]
-  },
-  "appUsingSizeAdjust": true,
-  "pages": {},
-  "pagesUsingSizeAdjust": false
-}
+{"pages":{},"app":{"/Users/duck/WebstormProjects/snow-shopping/apps/web/src/app/layout":["static/media/493c3cff6f1bd7f1-s.p.woff2","static/media/e4af272ccee01ff0-s.p.woff2"]},"appUsingSizeAdjust":true,"pagesUsingSizeAdjust":false}

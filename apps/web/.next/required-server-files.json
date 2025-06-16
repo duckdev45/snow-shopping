@@ -96,7 +96,7 @@
         "transform": "lodash/{{member}}"
       }
     },
-    "outputFileTracingRoot": "/Users/duck/WebstormProjects/show-shopping",
+    "outputFileTracingRoot": "/Users/duck/WebstormProjects/snow-shopping",
     "experimental": {
       "nodeMiddleware": false,
       "cacheLife": {
@@ -154,7 +154,7 @@
       "middlewarePrefetch": "flexible",
       "optimisticClientCache": true,
       "manualClientBasePath": false,
-      "cpus": 11,
+      "cpus": 9,
       "memoryBasedWorkersCount": false,
       "imgOptConcurrency": null,
       "imgOptTimeoutInSeconds": 7,
@@ -279,10 +279,10 @@
     "bundlePagesRouterDependencies": false,
     "configFileName": "next.config.ts",
     "turbopack": {
-      "root": "/Users/duck/WebstormProjects/show-shopping"
+      "root": "/Users/duck/WebstormProjects/snow-shopping"
     }
   },
-  "appDir": "/Users/duck/WebstormProjects/show-shopping/apps/web",
+  "appDir": "/Users/duck/WebstormProjects/snow-shopping/apps/web",
   "relativeAppDir": "apps/web",
   "files": [
     ".next/routes-manifest.json",

@@ -1,15 +1,24 @@
 import { useEffect, useState, useRef } from 'react';
 
-function throttle<T extends (...args: any[]) => void>(func: T, limit: number): T {
+/**
+ * @param func 要被節流的函數
+ * @param limit 時間限制 (毫秒)
+ */
+function throttle<F extends (...args: Parameters<F>) => void>(
+    func: F,
+    limit: number
+): (...args: Parameters<F>) => void {
     let inThrottle: boolean;
-    let lastFunc: NodeJS.Timeout;
-    return function(this: any, ...args: any[]) {
+
+    return function (...args: Parameters<F>) {
         if (!inThrottle) {
-            func.apply(this, args);
+            func(...args);
             inThrottle = true;
-            setTimeout(() => (inThrottle = false), limit);
+            setTimeout(() => {
+                inThrottle = false;
+            }, limit);
         }
-    } as T;
+    };
 }
 
 interface ScrollEffects {
@@ -25,11 +34,8 @@ export function useScrollEffects(threshold = 80): ScrollEffects {
     useEffect(() => {
         const handleScroll = () => {
             const currentScrollY = window.scrollY;
+            setIsAtTop(currentScrollY < threshold / 2);
 
-            // 判斷是否在頂部
-            setIsAtTop(currentScrollY < threshold / 2); // 在 threshold 一半的距離內都算頂部
-
-            // 判斷捲動方向
             if (currentScrollY <= threshold) {
                 setIsScrollingUp(true);
             } else if (currentScrollY < lastScrollY.current) {
@@ -37,12 +43,12 @@ export function useScrollEffects(threshold = 80): ScrollEffects {
             } else {
                 setIsScrollingUp(false);
             }
-
             lastScrollY.current = currentScrollY;
         };
 
         const throttledHandleScroll = throttle(handleScroll, 100);
         window.addEventListener('scroll', throttledHandleScroll);
+
         return () => {
             window.removeEventListener('scroll', throttledHandleScroll);
         };
