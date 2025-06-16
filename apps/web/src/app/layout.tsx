@@ -3,12 +3,13 @@ import {Inter, Noto_Sans_TC} from "next/font/google";
 import "./globals.css";
 import {SiteHeader} from "@/app/components/layout/SiteHeader";
 import {SiteFooter} from "@/app/components/layout/SiteFooter";
+import React from "react";
 
 const inter = Inter({subsets: ["latin"], variable: '--font-inter'});
 const notoSansTC = Noto_Sans_TC({subsets: ["latin"], weight: ["400", "500", "700"], variable: '--font-noto-sans-tc'});
 
 export const metadata: Metadata = {
-    title: "雪拼 Snow Shopping",
+    title: "雪拼 SnowShop",
     description: "斷捨離你的雪季回憶，為裝備找到下一段旅程。",
 };
 

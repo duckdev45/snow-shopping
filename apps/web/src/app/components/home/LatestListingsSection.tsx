@@ -8,28 +8,28 @@ const sampleProducts = [
         name: 'Burton Custom 2023 公分板',
         category: '單板 Snowboard',
         price: 8500,
-        imageUrl: 'https://placehold.co/400x300/e2e8f0/334155?text=Burton+Custom'
+        imageUrl: '/'
     },
     {
         id: '2',
         name: '[全新] Oakley Flight Deck M 雪鏡',
         category: '雪鏡 Goggle',
         price: 4200,
-        imageUrl: 'https://placehold.co/400x300/e2e8f0/334155?text=Oakley+Goggles'
+        imageUrl: '/'
     },
     {
         id: '3',
         name: '二手 Burton Ion 雪鞋 9.5號',
         category: '雪鞋 Boots',
         price: 6000,
-        imageUrl: 'https://placehold.co/400x300/e2e8f0/334155?text=Burton+Ion'
+        imageUrl: '/'
     },
     {
         id: '4',
         name: 'Volcom 雪衣外套 L號 女款',
         category: '雪衣雪褲 Apparel',
         price: 3800,
-        imageUrl: 'https://placehold.co/400x300/e2e8f0/334155?text=Volcom+Jacket'
+        imageUrl: '/'
     },
 ];
 

@@ -9,12 +9,12 @@ export function SiteHeader() {
             <nav className="container mx-auto px-4 lg:px-6 py-3">
                 <div className="flex justify-between items-center">
                     <Link href="/" className="flex items-center space-x-2">
-                        <Image src={logoSrc} alt="雪拼Logo" width={80} height={40} className="h-20 w-auto" />
+                        <Image src={logoSrc} alt="雪拼Logo" width={80} height={40} className="h-24 w-auto" />
                     </Link>
 
                     <div className="hidden lg:flex items-center space-x-6">
-                        <Link href="/browse" className="text-white hover:text-blue-600 transition-colors">瀏覽裝備</Link>
-                        <Link href="/about" className="text-white hover:text-blue-600 transition-colors">關於我們</Link>
+                        <Link href="/browse" className="text-white hover:text-blue-600 transition-colors">二手裝備</Link>
+                        <Link href="/about" className="text-white hover:text-blue-600 transition-colors">雪票交易</Link>
                     </div>
 
                     <div className="flex items-center space-x-2">
