@@ -27,11 +27,7 @@ const categoryDetails = [
     imageUrl: '/images/snowboard.png',
     href: '/browse?category=snowboard'
   },
-  {
-    key: 'ski',
-    imageUrl: '/images/ski.png',
-    href: '/browse?category=ski'
-  },
+  { key: 'ski', imageUrl: '/images/ski.png', href: '/browse?category=ski' },
   {
     key: 'apparel',
     imageUrl: '/images/jacketW.png',
@@ -77,13 +73,14 @@ export function CategoriesSection() {
     setIsClient(true)
   }, [])
 
-  // 在 i18n 初始化完成前，先顯示 Loading，避免畫面閃爍
   if (!isClient || !i18n.isInitialized) {
     return (
       <section className='bg-white py-16'>
         <div className='container mx-auto px-4 lg:px-6'>
-          <h2 className='mb-10 text-center text-3xl font-bold text-gray-600'>探索熱門分類</h2>
-          <div className="h-40 text-center">Loading...</div>
+          <h2 className='mb-10 text-center text-3xl font-bold text-gray-600'>
+            探索熱門分類
+          </h2>
+          <div className='h-40 text-center'>Loading...</div>
         </div>
       </section>
     )
@@ -95,27 +92,33 @@ export function CategoriesSection() {
         <h2 className='mb-10 text-center text-3xl font-bold text-gray-600'>
           {t('CategoriesSection.title', '探索熱門分類')}
         </h2>
-        <div className='grid grid-cols-3 gap-4 md:grid-cols-5 md:gap-6 lg:grid-cols-9'>
+        <div className='flex flex-wrap justify-center gap-4 md:gap-6'>
           {categoryDetails.map((category) => {
-            // 從 i18n 取得翻譯後的分類名稱
-            const translatedName = t(`CategoriesSection.categories.${category.key}`)
+            const translatedName = t(
+              `CategoriesSection.categories.${category.key}`
+            )
 
             return (
               <Link
                 key={category.key}
                 href={category.href}
-                className='group block rounded-xl border border-gray-200 p-4 text-center transition-all duration-300 hover:border-blue-500 hover:shadow-lg'>
+                // --- 限制寬度 ---
+                className='group block w-28 rounded-xl border border-gray-200 p-2 text-center transition-all duration-300 hover:border-blue-500 hover:shadow-lg md:w-32'>
                 <div
-                  className='mx-auto mb-4 flex h-24 w-24 items-center justify-center overflow-hidden rounded-full bg-slate-100 transition-colors group-hover:bg-blue-100'>
+                  // --- 縮小圓圈並加上 padding ---
+                  className='mx-auto mb-2 flex h-24 w-24 items-center justify-center overflow-hidden rounded-full bg-slate-100 transition-colors group-hover:bg-blue-100'>
                   <Image
                     src={category.imageUrl}
                     alt={`${translatedName} 分類圖示`}
                     width={100}
                     height={100}
-                    className='object-contain transition-transform duration-300 group-hover:scale-110' // 加個帥氣的放大效果
+                    // --- 讓圖片填滿容器的 padding 內部 ---
+                    className='h-full w-full object-contain transition-transform duration-300 group-hover:scale-110'
                   />
                 </div>
-                <h3 className='font-semibold text-gray-800'>{translatedName}</h3>
+                <h3 className='text-sm font-semibold text-gray-800'>
+                  {translatedName}
+                </h3>
               </Link>
             )
           })}
