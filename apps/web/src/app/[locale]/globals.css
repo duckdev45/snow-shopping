@@ -1,0 +1,13 @@
+@import 'tailwindcss';
+
+body {
+    font-family: 'Inter', 'Noto Sans TC', sans-serif;
+    background-color: #f8fafc; /* 使用一個非常淡的灰色背景 */
+    color: #1f2937; /* text-gray-800 */
+}
+
+.hero-bg {
+    background-image: url('/hero-bg.png');
+    background-size: cover;
+    background-position: center;
+}

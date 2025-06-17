@@ -1,0 +1,25 @@
+{
+  "CategoriesSection": {
+    "title": "Explore Popular Categories",
+    "categories": {
+      "snowboard": "Snowboard",
+      "ski": "Ski",
+      "apparel": "Apparel",
+      "goggles": "Goggles",
+      "helmet": "Helmet",
+      "gloves": "Gloves",
+      "accessories": "Accessories",
+      "boots": "Boots",
+      "lift-ticket": "Lift Ticket",
+      "other": "Other"
+    }
+  },
+  "ProductCard": {
+    "addToFavorites": "Favorites"
+  },
+  "CallToActionSection": {
+    "title": "Got Gear Lying Around?",
+    "description": "Don't let it gather dust! Snap a pic, upload it, set a price, and find a new home for your old gear in just three minutes.",
+    "button": "List for Free Now"
+  }
+}

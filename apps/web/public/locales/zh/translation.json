@@ -1,0 +1,24 @@
+{
+  "CategoriesSection": {
+    "title": "探索熱門分類",
+    "categories": {
+      "snowboard": "單板",
+      "ski": "雙板",
+      "apparel": "雪衣雪褲",
+      "goggles": "雪鏡",
+      "helmet": "安全帽",
+      "gloves": "手套配件",
+      "boots": "雪鞋",
+      "lift-ticket": "雪票",
+      "other": "其他"
+    }
+  },
+  "ProductCard": {
+    "addToFavorites": "收藏"
+  },
+  "CallToActionSection": {
+    "title": "有閒置的裝備嗎？",
+    "description": "別讓它們在角落積灰塵！拍照、上傳、訂個價，三分鐘就能為你的舊愛找到新主人。",
+    "button": "立即免費刊登"
+  }
+}
