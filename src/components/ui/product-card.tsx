@@ -5,6 +5,7 @@ import {Badge} from '@/components/ui/badge'
 import {Button} from '@/components/ui/button'
 import {Heart} from 'lucide-react'
 import {cn} from '@/lib/utils'
+import {MapPin} from 'lucide-react'
 
 interface ProductCardProps {
     id: string
@@ -16,6 +17,7 @@ interface ProductCardProps {
     brand?: string
     sellerName?: string
     sellerAvatar?: string
+    location?: string
 }
 
 const CONDITION_MAP: Record<string, { label: string; color: string }> = {
@@ -32,7 +34,8 @@ export function ProductCard({
                                 imageUrl,
                                 category,
                                 condition,
-                                brand
+                                brand,
+                                location
                             }: ProductCardProps) {
     const conditionInfo = CONDITION_MAP[condition] || {
         label: '二手',
@@ -80,9 +83,17 @@ export function ProductCard({
             {/* 4. 內容區域 */}
             <div className='flex flex-1 flex-col p-4'>
                 <div className='flex-1'>
-                    <p className='mb-1 text-xs font-medium tracking-wider text-gray-500 uppercase'>
-                        {category}
-                    </p>
+                    {/*<p className='mb-1 text-xs font-medium tracking-wider text-gray-500 uppercase'>*/}
+                    {/*    {category}*/}
+                    {/*</p>*/}
+
+                    {/* 地點顯示 (靠右對齊) */}
+                    {location && (
+                        <div className="flex items-center gap-1 text-xs text-gray-500">
+                            <MapPin className="h-3 w-3"/>
+                            <span>{location}</span>
+                        </div>
+                    )}
 
                     {/* 標題連結 */}
                     <Link href={`/products/${id}`}>

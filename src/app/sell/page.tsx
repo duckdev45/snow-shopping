@@ -11,6 +11,7 @@ import {createProductAction, updateProductAction} from './actions'
 import {Button} from '@/components/ui/button'
 import {Input} from '@/components/ui/input'
 import {Textarea} from '@/components/ui/textarea'
+import {MapPin} from 'lucide-react'
 import {
     Select,
     SelectContent,
@@ -71,6 +72,30 @@ const BRANDS = [
     {id: 'patagonia', label: 'Patagonia'},
     {id: 'arcteryx', label: "Arc'teryx"},
     {id: 'other', label: '其他 / Other'},
+]
+
+// 台灣縣市列表
+const LOCATIONS = [
+    {
+        label: "北部地區",
+        cities: ["基隆市", "台北市", "新北市", "桃園市", "新竹市", "新竹縣", "宜蘭縣"]
+    },
+    {
+        label: "中部地區",
+        cities: ["苗栗縣", "台中市", "彰化縣", "南投縣", "雲林縣"]
+    },
+    {
+        label: "南部地區",
+        cities: ["嘉義市", "嘉義縣", "台南市", "高雄市", "屏東縣"]
+    },
+    {
+        label: "東部地區",
+        cities: ["台東縣", "花蓮縣"]
+    },
+    {
+        label: "離島地區",
+        cities: ["澎湖縣", "金門縣", "連江縣"]
+    },
 ]
 
 // 抽出表單邏輯組件
@@ -325,7 +350,7 @@ function ProductForm() {
                         )}
                     </div>
 
-                    <div className='grid grid-cols-2 gap-4'>
+                    <div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
                         <div className='space-y-2'>
                             <Label>分類</Label>
                             <Select
@@ -371,6 +396,38 @@ function ProductForm() {
                                 <p className='text-sm text-red-500'>
                                     {errors.condition.message}
                                 </p>
+                            )}
+                        </div>
+                        {/* 地點 */}
+                        <div className='space-y-2'>
+                            <Label>地點</Label>
+                            <Select
+                                onValueChange={(val) => setValue('location', val)}
+                                defaultValue={watch('location') || ''}
+                                value={watch('location')}>
+                                <SelectTrigger>
+                                    <div className="flex items-center gap-2">
+                                        <MapPin className="h-4 w-4 text-gray-500"/>
+                                        <SelectValue placeholder='選擇縣市'/>
+                                    </div>
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {LOCATIONS.map((group) => (
+                                        <div key={group.label}>
+                                            <div className="px-2 py-1.5 text-xs font-semibold text-gray-500">
+                                                {group.label}
+                                            </div>
+                                            {group.cities.map((city) => (
+                                                <SelectItem key={city} value={city}>
+                                                    {city}
+                                                </SelectItem>
+                                            ))}
+                                        </div>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                            {errors.location && (
+                                <p className='text-sm text-red-500'>{errors.location.message}</p>
                             )}
                         </div>
                     </div>

@@ -5,7 +5,7 @@ import { SiteFooter } from '@/components/layout/SiteFooter'
 import React from 'react'
 
 export const metadata: Metadata = {
-  title: '雪拼 SnowShop',
+  title: '雪拼 SnowShopping',
   description: '斷捨離你的雪季回憶，為裝備找到下一段旅程。'
 }
 

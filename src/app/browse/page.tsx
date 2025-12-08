@@ -110,6 +110,7 @@ export default async function BrowsePage({searchParams}: BrowsePageProps) {
                                     condition={product.condition}
                                     imageUrl={product.images?.[0] || '/placeholder.png'}
                                     brand={product.brand}
+                                    location={product.location}
                                 />
                             ))}
                         </div>

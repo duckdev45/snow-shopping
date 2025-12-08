@@ -104,6 +104,7 @@ export default async function ProfilePage() {
                                         condition={product.condition}
                                         imageUrl={product.images?.[0]}
                                         brand={product.brand}
+                                        location={product.location}
                                     />
 
                                     {/* 判斷一下狀態，如果已經下架了，可以給個不同的樣式，或者直接蓋上遮罩 */}

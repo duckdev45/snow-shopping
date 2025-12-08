@@ -68,14 +68,14 @@ export function CategoriesSection() {
         <h2 className='mb-10 text-center text-3xl font-bold text-gray-600'>
           探索熱門分類
         </h2>
-        <div className='grid grid-cols-3 gap-4 md:flex md:flex-wrap md:justify-center md:gap-6'>
+        <div className='grid grid-cols-3 gap-4 md:flex md:flex-wrap md:justify-center md:gap-2'>
           {categoryDetails.map((category) => {
             const translatedName = category.name
 
             return (
               <Card
                 key={category.key}
-                className='group block rounded-xl border border-gray-200 p-2 text-center transition-all duration-300 hover:border-blue-500 hover:shadow-lg md:w-32'>
+                className='group block rounded-xl border border-gray-200 p-2 text-center transition-all duration-300 hover:border-cyan-500 hover:shadow-lg md:w-32'>
                 <Link href={category.href}>
                   <CardContent className='p-0'>
                     <div className='mx-auto mb-2 flex h-24 w-24 items-center justify-center overflow-hidden rounded-full bg-slate-100 transition-colors group-hover:bg-blue-100'>

@@ -3,201 +3,309 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import clsx from 'clsx'
-import { useScrollEffects } from '@/hooks/useScrollEffects'
-import React, { useEffect, useState } from 'react'
-import { User } from '@supabase/supabase-js'
+import {useScrollEffects} from '@/hooks/useScrollEffects'
+import React, {useEffect, useState} from 'react'
+import {User} from '@supabase/supabase-js'
+import {useRouter, usePathname} from 'next/navigation'
+import {createClient} from '@/lib/supabase/client'
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger
+    Ghost,
+    LogOut,
+    User as UserIcon,
+    ShoppingBag,
+    Menu,
+    Snowflake,
+    Ticket,
+    Info, // ✨ 新增 Info icon
+    Coffee // ✨ 新增 Coffee icon (代表抖內)
+} from 'lucide-react'
+
+// Shadcn UI Components
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { createClient } from '@/lib/supabase/client'
-import { Ghost, LogOut, User as UserIcon, ShoppingBag } from 'lucide-react'
-import { useRouter, usePathname } from 'next/navigation'
+import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar'
+import {Button} from '@/components/ui/button'
+import {
+    Sheet,
+    SheetContent,
+    SheetHeader,
+    SheetTitle,
+    SheetTrigger,
+    SheetClose
+} from '@/components/ui/sheet'
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog" // ✨ 引入 Dialog
 
 export function SiteHeader() {
-  const logoSrc = '/snowShopping.png'
-  const { isScrollingUp, isAtTop } = useScrollEffects()
-  const [user, setUser] = useState<User | null>(null)
-  const router = useRouter()
-  const pathname = usePathname()
-  const supabase = createClient()
+    const logoSrc = '/snowShopping.png'
+    const {isScrollingUp, isAtTop} = useScrollEffects()
+    const [user, setUser] = useState<User | null>(null)
+    const router = useRouter()
+    const pathname = usePathname()
+    const supabase = createClient()
 
-  // 判斷是否為首頁 (或是其他有 Hero 圖片的頁面)
-  const isHome = pathname === '/'
+    const isHome = pathname === '/'
 
-  // 檢查使用者登入狀態
-  useEffect(() => {
-    const getUser = async () => {
-      const {
-        data: { user }
-      } = await supabase.auth.getUser()
-      setUser(user)
-    }
-    getUser()
-
-    // 監聽登入狀態改變
-    const {
-      data: { subscription }
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setUser(session?.user ?? null)
-    })
-
-    return () => subscription.unsubscribe()
-  }, [])
-
-  // 登出功能
-  const handleLogout = async () => {
-    await supabase.auth.signOut()
-    router.refresh()
-  }
-
-  // 取得顯示名稱的第一個字 (用於沒有圖片時)
-  const getAvatarFallback = () => {
-    const name = user?.user_metadata?.full_name || user?.email || 'S'
-    return name.charAt(0).toUpperCase()
-  }
-
-  return (
-    <header
-      className={clsx(
-        'fixed top-0 z-50 w-full transition-all duration-300 ease-in-out',
-        {
-          // 情況 A: 在首頁，且在頂部 -> 透明背景
-          'bg-transparent text-white': isHome && isAtTop,
-
-          // 情況 B: 在首頁但滾動中，或是「根本不在首頁」 -> 深色背景 (避免文字在白底消失)
-          'bg-slate-900/90 text-white shadow-md backdrop-blur-md':
-            !isHome || !isAtTop,
-
-          // 情況 C: 控制顯示/隱藏 (往下滾時藏起來)
-          'translate-y-0': isScrollingUp || isAtTop,
-          '-translate-y-full': !isScrollingUp && !isAtTop
+    useEffect(() => {
+        const getUser = async () => {
+            const {
+                data: {user}
+            } = await supabase.auth.getUser()
+            setUser(user)
         }
-      )}>
-      <nav className='container mx-auto px-4 lg:px-6'>
-        <div className='flex items-center justify-between'>
-          <Link href='/' className='flex items-center space-x-2'>
-            <Image
-              src={logoSrc}
-              alt='雪拼Logo'
-              width={80}
-              height={40}
-              className='h-24 w-auto'
-            />
-          </Link>
+        getUser()
 
-          <div className='hidden items-center space-x-6 lg:flex'>
-            <Link
-              href='/browse'
-              className='transition-colors hover:text-blue-600'>
-              二手裝備
-            </Link>
-            <Link
-              href='/browse?category=lift-ticket'
-              className='font-medium transition-colors hover:text-blue-400'>
-              {' '}
-              雪票交易
-            </Link>
-          </div>
+        const {
+            data: {subscription}
+        } = supabase.auth.onAuthStateChange((_event, session) => {
+            setUser(session?.user ?? null)
+        })
 
-          <div className='flex items-center space-x-4'>
-            {user ? (
-              // ------------------------------------------------
-              // 狀態 A: 已登入 -> 顯示大頭貼 Dropdown
-              // ------------------------------------------------
-              <DropdownMenu>
-                <DropdownMenuTrigger asChild>
-                  <button className='rounded-full ring-2 ring-white/50 transition-all hover:ring-white focus:outline-none'>
-                    <Avatar className='h-9 w-9'>
-                      <AvatarImage src={user.user_metadata.avatar_url} />
-                      <AvatarFallback className='bg-blue-600 font-bold text-white'>
-                        {getAvatarFallback()}
-                      </AvatarFallback>
+        return () => subscription.unsubscribe()
+    }, [])
+
+    const handleLogout = async () => {
+        await supabase.auth.signOut()
+        router.refresh()
+    }
+
+    const getAvatarFallback = () => {
+        const name = user?.user_metadata?.full_name || user?.email || 'S'
+        return name.charAt(0).toUpperCase()
+    }
+
+    // bo-ba-me and content
+    const AboutDialog = ({isMobile = false}: { isMobile?: boolean }) => (
+        <Dialog>
+            <DialogTrigger asChild>
+                <button
+                    className={clsx(
+                        "flex items-center transition-colors hover:text-blue-500",
+                        isMobile ? "text-lg font-medium text-gray-900 w-full" : "text-lg lg:text-base font-medium"
+                    )}
+                >
+                    {isMobile ? <Info className="mr-3 h-5 w-5"/> : null}
+                    關於雪拼
+                </button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[400px]">
+                <DialogHeader>
+                    <DialogTitle className="flex items-center gap-2 text-xl">
+                        關於雪拼 SnowShopping
+                    </DialogTitle>
+                    <DialogDescription className="text-base pt-1">
+                        Hello, 我是雪拼的開發者 Duck 🐤
+                    </DialogDescription>
+                </DialogHeader>
+
+                <div className="grid gap-4 py-2">
+                    <p className="text-sm text-gray-600 leading-relaxed">
+                        開發這個網站就像滑雪一樣，雖然快樂但也有點開銷<br/>（Server 費、網域費、還有一些隱形成本...💸）
+                    </p>
+                    <p className="text-sm text-gray-600 leading-relaxed">
+                        如果你/妳覺得網站還不錯用，或是順利交易了裝備 🎉<br/>
+                        能<b>「請我喝杯珍奶」</b>！就更感謝支持了<br/>
+                        這杯珍奶不只能補充我的糖分，更是我半夜修 Bug、開發新功能的燃料（aka 熬夜動力）
+                    </p>
+                    <p className="text-sm font-medium text-gray-900">
+                        有想許願的新功能也可以在抖內的時候偷偷跟我說喔<br/>
+                        讓我們一起讓雪拼變得更好滑...（誤），是更好用！✨
+                    </p>
+                </div>
+
+                {/* bo-ba-me 按鈕 */}
+                <div className="flex justify-center pt-2">
+                    <a
+                        href="https://duckdev45.bobaboba.me"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center justify-center w-[180px] h-[48px] bg-[#CCA78C] text-white rounded-xl shadow-lg hover:bg-[#b8957a] hover:scale-105 transition-all duration-200 active:scale-95"
+                    >
+                        <img
+                            src="https://s3.ap-southeast-1.amazonaws.com/media.anyonelab.com/images/boba/boba-embed-icon.png"
+                            alt="boba"
+                            className="h-6 w-auto mr-2"
+                        />
+                        <span className="font-bold tracking-wide">點我抖內珍奶</span>
+                    </a>
+                </div>
+            </DialogContent>
+        </Dialog>
+    )
+
+// --- 使用者選單 ---
+    const UserMenu = () => (
+        <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+                <button
+                    className='rounded-full ring-2 ring-white/50 transition-all hover:ring-white focus:outline-none'>
+                    <Avatar className='h-8 w-8 lg:h-9 lg:w-9'>
+                        <AvatarImage src={user?.user_metadata.avatar_url}/>
+                        <AvatarFallback className='bg-blue-600 font-bold text-white text-xs lg:text-sm'>
+                            {getAvatarFallback()}
+                        </AvatarFallback>
                     </Avatar>
-                  </button>
-                </DropdownMenuTrigger>
-
-                <DropdownMenuContent align='end' className='mt-2 w-56'>
-                  <DropdownMenuLabel>
+                </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align='end' className='mt-2 w-56'>
+                <DropdownMenuLabel>
                     <div className='flex flex-col space-y-1'>
-                      <p className='truncate text-sm leading-none font-medium'>
-                        {user.user_metadata.full_name || '雪友'}
-                      </p>
-                      <p className='text-muted-foreground truncate text-xs leading-none'>
-                        {user.email}
-                      </p>
+                        <p className='truncate text-sm leading-none font-medium'>
+                            {user?.user_metadata.full_name || '雪友'}
+                        </p>
+                        <p className='text-muted-foreground truncate text-xs leading-none'>
+                            {user?.email}
+                        </p>
                     </div>
-                  </DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-
-                  <DropdownMenuItem
+                </DropdownMenuLabel>
+                <DropdownMenuSeparator/>
+                <DropdownMenuItem
                     onClick={() => router.push('/profile')}
                     className='cursor-pointer'>
-                    <UserIcon className='mr-2 h-4 w-4' />
-                    <span>個人檔案</span>
-                  </DropdownMenuItem>
-
-                  <DropdownMenuItem
+                    <UserIcon className='mr-2 h-4 w-4'/>
+                    個人檔案
+                </DropdownMenuItem>
+                <DropdownMenuItem
                     onClick={() => router.push('/sell')}
                     className='cursor-pointer'>
-                    <ShoppingBag className='mr-2 h-4 w-4' />
-                    <span>刊登商品</span>
-                  </DropdownMenuItem>
-
-                  <DropdownMenuSeparator />
-
-                  <DropdownMenuItem
+                    <ShoppingBag className='mr-2 h-4 w-4'/>
+                    刊登商品
+                </DropdownMenuItem>
+                <DropdownMenuSeparator/>
+                <DropdownMenuItem
                     className='cursor-pointer text-red-600 focus:bg-red-50 focus:text-red-600'
                     onClick={handleLogout}>
-                    <LogOut className='mr-2 h-4 w-4' />
-                    <span>登出</span>
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            ) : (
-              // ------------------------------------------------
-              // 狀態 B: 未登入 -> 顯示登入按鈕
-              // ------------------------------------------------
-              <Link href='/login'>
-                <button className='flex items-center rounded-full bg-cyan-700 px-6 py-2 text-sm font-medium text-white shadow-md transition-all hover:bg-cyan-600 hover:shadow-lg active:scale-95'>
-                  <Ghost className='mr-2 h-4 w-4' />
-                  登入
-                </button>
-              </Link>
-            )}
+                    <LogOut className='mr-2 h-4 w-4'/>
+                    登出
+                </DropdownMenuItem>
+            </DropdownMenuContent>
+        </DropdownMenu>
+    )
 
-            {/* Mobile Menu Icon (手機版選單) */}
-            <button className='rounded-md p-2 text-white hover:bg-white/20 lg:hidden'>
-              <MenuIcon className='h-6 w-6' />
+// --- 登入按鈕 ---
+    const AuthButton = () => (
+        <Link href='/login'>
+            <button
+                className='flex items-center rounded-full bg-cyan-700 px-4 py-1.5 text-xs font-medium text-white shadow-md transition-all hover:bg-cyan-600 hover:shadow-lg active:scale-95 lg:px-6 lg:py-2 lg:text-sm'>
+                <Ghost className='mr-2 h-3 w-3 lg:h-4 lg:w-4'/>
+                登入
             </button>
-          </div>
-        </div>
-      </nav>
-    </header>
-  )
-}
+        </Link>
+    )
 
-function MenuIcon(props: React.SVGProps<SVGSVGElement>) {
-  return (
-    <svg
-      xmlns='http://www.w3.org/2000/svg'
-      width='24'
-      height='24'
-      viewBox='0 0 24 24'
-      fill='none'
-      stroke='currentColor'
-      strokeWidth='2'
-      strokeLinecap='round'
-      strokeLinejoin='round'
-      {...props}>
-      <line x1='4' x2='20' y1='12' y2='12' />
-      <line x1='4' x2='20' y1='6' y2='6' />
-      <line x1='4' x2='20' y1='18' y2='18' />
-    </svg>
-  )
+    return (
+        <header
+            className={clsx(
+                'fixed top-0 z-50 w-full transition-all duration-300 ease-in-out',
+                {
+                    'bg-transparent text-white': isHome && isAtTop,
+                    'bg-slate-900/90 text-white shadow-md backdrop-blur-md':
+                        !isHome || !isAtTop,
+                    'translate-y-0': isScrollingUp || isAtTop,
+                    '-translate-y-full': !isScrollingUp && !isAtTop
+                }
+            )}>
+            <nav className='container mx-auto px-4 lg:px-6'>
+                <div className='flex items-center justify-between'>
+                    {/* 1. Logo */}
+                    <Link href='/' className='flex items-center space-x-2'>
+                        <Image
+                            src={logoSrc}
+                            alt='雪拼Logo'
+                            width={80}
+                            height={40}
+                            className='h-20 w-auto object-contain lg:h-24'
+                        />
+                    </Link>
+
+                    {/* 2. Desktop Navigation */}
+                    <div className='hidden items-center space-x-6 lg:flex'>
+                        <Link
+                            href='/browse'
+                            className='text-lg font-medium transition-colors hover:text-blue-600 lg:text-base'>
+                            二手裝備
+                        </Link>
+                        <Link
+                            href='/browse?category=lift-ticket'
+                            className='text-lg font-medium transition-colors hover:text-blue-400 lg:text-base'>
+                            雪票交易
+                        </Link>
+                        {/* ✨ 這裡加入電腦版 About 按鈕 */}
+                        <AboutDialog/>
+                    </div>
+
+                    {/* 3. Right Side Actions */}
+                    <div className='flex items-center gap-2 sm:gap-4'>
+
+                        {/* A. User Status */}
+                        {user ? <UserMenu/> : <AuthButton/>}
+
+                        {/* B. Mobile Menu Trigger */}
+                        <div className='lg:hidden'>
+                            <Sheet>
+                                <SheetTrigger asChild>
+                                    <Button
+                                        variant='ghost'
+                                        size='icon'
+                                        className='text-white hover:bg-white/20 hover:text-white'>
+                                        <Menu className='h-6 w-6'/>
+                                        <span className='sr-only'>開啟選單</span>
+                                    </Button>
+                                </SheetTrigger>
+
+                                <SheetContent side='right' className='w-[300px]'>
+                                    <SheetHeader>
+                                        <SheetTitle className='text-left text-xl font-bold'>
+                                            雪拼地圖
+                                        </SheetTitle>
+                                    </SheetHeader>
+
+                                    <div className='mt-8 flex flex-col gap-6 px-2'>
+                                        <SheetClose asChild>
+                                            <Link
+                                                href='/browse'
+                                                className='flex items-center text-lg font-medium hover:text-blue-600'>
+                                                <Snowflake className='mr-3 h-5 w-5'/>
+                                                二手裝備
+                                            </Link>
+                                        </SheetClose>
+
+                                        <SheetClose asChild>
+                                            <Link
+                                                href='/browse?category=lift-ticket'
+                                                className='flex items-center text-lg font-medium hover:text-blue-600'>
+                                                <Ticket className='mr-3 h-5 w-5'/>
+                                                雪票交易
+                                            </Link>
+                                        </SheetClose>
+
+                                        {/* ✨ 手機版選單也加入 About */}
+                                        {/* 注意：Dialog 本身有自己的開關，不需要包 SheetClose，
+                        但為了讓點擊後手機選單不要擋住 Dialog，我們可以斟酌行為。
+                        不過 Dialog 通常會蓋在最上面 (z-index 50)，所以沒問題。
+                    */}
+                                        <div className="flex items-center">
+                                            <AboutDialog isMobile/>
+                                        </div>
+                                    </div>
+                                </SheetContent>
+                            </Sheet>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+        </header>
+    )
 }

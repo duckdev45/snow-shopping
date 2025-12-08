@@ -34,7 +34,8 @@ export async function createProductAction(data: ProductFormData) {
             condition: result.data.condition,
             images: result.data.images,
             status: 'active', // 預設上架中
-            brand: result.data.brand
+            brand: result.data.brand,
+            location: result.data.location,
         })
         .select()
         .single()
@@ -80,6 +81,7 @@ export async function updateProductAction(
             condition: result.data.condition,
             images: result.data.images,
             brand: result.data.brand,
+            location: result.data.location,
             updated_at: new Date().toISOString() // 更新時間
         })
         .eq('id', productId)

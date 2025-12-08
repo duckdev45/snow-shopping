@@ -24,7 +24,8 @@ export const productSchema = z.object({
         errorMap: () => ({message: '請選擇商品狀況'})
     }),
     // 圖片我們在前端處理完上傳，這裡只收 URL 陣列
-    images: z.array(z.string()).min(1, '請至少上傳一張照片')
+    images: z.array(z.string()).min(1, '請至少上傳一張照片'),
+    location: z.string().min(1, "請選擇所在位置"),
 })
 
 export type ProductFormData = z.infer<typeof productSchema>
