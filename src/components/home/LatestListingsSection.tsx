@@ -35,6 +35,7 @@ export async function LatestListingsSection() {
               price={product.price}
               condition={product.condition}
               imageUrl={product.images?.[0] || '/placeholder.png'}
+              brand={product.brand}
             />
           ))}
         </div>

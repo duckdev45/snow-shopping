@@ -6,7 +6,7 @@ import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar'
 import {Button} from '@/components/ui/button'
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
 import {Badge} from '@/components/ui/badge'
-import {Settings, Package, Heart, LogOut} from 'lucide-react'
+import {Package, Heart} from 'lucide-react'
 import {EditProfileDialog} from './EditProfileDialog'
 import {ProductItemActions} from './ProductItemActions'
 
@@ -103,6 +103,7 @@ export default async function ProfilePage() {
                                         price={product.price}
                                         condition={product.condition}
                                         imageUrl={product.images?.[0]}
+                                        brand={product.brand}
                                     />
 
                                     {/* 判斷一下狀態，如果已經下架了，可以給個不同的樣式，或者直接蓋上遮罩 */}
