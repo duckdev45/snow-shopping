@@ -1,0 +1,141 @@
+import { redirect } from 'next/navigation'
+import Link from 'next/link'
+import { createClient } from '@/lib/supabase/server'
+import { ProductCard } from '@/components/ui/product-card' //
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { Badge } from '@/components/ui/badge'
+import { Settings, Package, Heart, LogOut } from 'lucide-react'
+import { EditProfileDialog } from './EditProfileDialog'
+
+export default async function ProfilePage() {
+  const supabase = await createClient()
+
+  // 1. 檢查登入
+  const {
+    data: { user }
+  } = await supabase.auth.getUser()
+  if (!user) {
+    redirect('/login')
+  }
+
+  // 2. 抓取 Profile 資料
+  const { data: profile } = await supabase
+    .from('profiles')
+    .select('*')
+    .eq('id', user.id)
+    .single()
+
+  // 3. 抓取「我的商品」
+  const { data: myListings } = await supabase
+    .from('products')
+    .select('*')
+    .eq('seller_id', user.id)
+    .order('created_at', { ascending: false })
+
+  // 4. (選配) 抓取「我的收藏」
+  // 這邊需要你之後建一個 `favorites` table 才能用，先留個位子
+
+  return (
+    <div className='container mx-auto min-h-screen px-4 pt-28 pb-10 lg:px-6'>
+      {/* --- Header 區塊：個人名片 --- */}
+      <div className='mb-10 flex flex-col items-center gap-6 md:flex-row md:items-start md:gap-10'>
+        <div className='group relative'>
+          <Avatar className='h-32 w-32 border-4 border-white shadow-xl'>
+            <AvatarImage src={profile?.avatar_url} />
+            <AvatarFallback className='text-4xl'>
+              {profile?.full_name?.[0]}
+            </AvatarFallback>
+          </Avatar>
+        </div>
+
+        <div className='flex-1 space-y-2 text-center md:text-left'>
+          <h1 className='text-3xl font-bold text-gray-900'>
+            {profile?.full_name || '未命名雪友'}
+          </h1>
+          <p className='text-gray-500'>
+            @{profile?.username || user.email?.split('@')[0]}
+          </p>
+
+          <div className='flex flex-wrap items-center justify-center gap-2 md:justify-start'>
+            <Badge
+              variant='secondary'
+              className='bg-blue-100 text-blue-700 hover:bg-blue-100'>
+              {profile?.snow_experience || '雪場菜鳥'}
+            </Badge>
+            <span className='text-sm text-gray-400'>
+              加入於 {new Date(user.created_at).getFullYear()} 年
+            </span>
+          </div>
+        </div>
+
+        <div className='flex gap-3'>
+          {/* 編輯資料按鈕 (Client Component) */}
+          <EditProfileDialog profile={profile} />
+        </div>
+      </div>
+
+      {/* --- Content 區塊：分頁 --- */}
+      <Tabs defaultValue='listings' className='w-full'>
+        <TabsList className='grid w-full max-w-md grid-cols-2'>
+          <TabsTrigger value='listings'>
+            <Package className='mr-2 h-4 w-4' />
+            我的賣場 ({myListings?.length || 0})
+          </TabsTrigger>
+          <TabsTrigger value='favorites'>
+            <Heart className='mr-2 h-4 w-4' />
+            收藏清單
+          </TabsTrigger>
+        </TabsList>
+
+        {/* Tab 1: 我的商品 */}
+        <TabsContent value='listings' className='mt-6'>
+          {myListings && myListings.length > 0 ? (
+            <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+              {myListings.map((product) => (
+                <div key={product.id} className='group relative'>
+                  <ProductCard
+                    id={product.id}
+                    title={product.title}
+                    category={product.category}
+                    price={product.price}
+                    condition={product.condition}
+                    imageUrl={product.images?.[0]}
+                  />
+                  {/* 管理按鈕 Overlay (Hover 顯示) */}
+                  <div className='absolute inset-0 flex items-center justify-center gap-2 rounded-xl bg-black/60 opacity-0 transition-opacity group-hover:opacity-100'>
+                    <Button variant='secondary' size='sm'>
+                      <Link href={`/sell?edit=${product.id}`}>編輯</Link>{' '}
+                    </Button>
+                    {/* 這裡之後可以接 Server Action 做刪除 */}
+                    <Button variant='destructive' size='sm'>
+                      下架
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className='flex flex-col items-center justify-center rounded-xl border-2 border-dashed py-12 text-center'>
+              <p className='mb-4 text-gray-500'>
+                你的賣場空空如也，快去清庫存！
+              </p>
+              <Button asChild>
+                <Link href='/sell'>立即刊登</Link>
+              </Button>
+            </div>
+          )}
+        </TabsContent>
+
+        {/* Tab 2: 收藏 (先放個 Placeholder) */}
+        <TabsContent value='favorites' className='mt-6'>
+          <div className='flex flex-col items-center justify-center py-12 text-center text-gray-500'>
+            <Heart className='mb-4 h-12 w-12 text-gray-300' />
+            <p>收藏功能即將上線，敬請期待！</p>
+          </div>
+        </TabsContent>
+      </Tabs>
+    </div>
+  )
+}
