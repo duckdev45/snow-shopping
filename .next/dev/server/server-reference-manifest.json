@@ -1,5 +1,51 @@
 {
-  "node": {},
+  "node": {
+    "402d78defd709b4d8390e8c3a945d47f35e4db84af": {
+      "workers": {
+        "app/profile/page": {
+          "moduleId": "[project]/.next-internal/server/app/profile/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/sell/actions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "deactivateProductAction",
+          "filename": "src/app/sell/actions.ts"
+        }
+      },
+      "layer": {
+        "app/profile/page": "action-browser"
+      },
+      "filename": "src/app/sell/actions.ts",
+      "exportedName": "deactivateProductAction"
+    },
+    "40384cd0b51c9ba5928e17fbf6ece8707369d71181": {
+      "workers": {
+        "app/sell/page": {
+          "moduleId": "[project]/.next-internal/server/app/sell/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/sell/actions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "createProductAction",
+          "filename": "src/app/sell/actions.ts"
+        }
+      },
+      "layer": {
+        "app/sell/page": "action-browser"
+      },
+      "filename": "src/app/sell/actions.ts",
+      "exportedName": "createProductAction"
+    },
+    "60834c24400cbaed4bb6702b953baa5abd0871dcc3": {
+      "workers": {
+        "app/sell/page": {
+          "moduleId": "[project]/.next-internal/server/app/sell/page/actions.js { ACTIONS_MODULE0 => \"[project]/src/app/sell/actions.ts [app-rsc] (ecmascript)\" } [app-rsc] (server actions loader, ecmascript)",
+          "async": false,
+          "exportedName": "updateProductAction",
+          "filename": "src/app/sell/actions.ts"
+        }
+      },
+      "layer": {
+        "app/sell/page": "action-browser"
+      },
+      "filename": "src/app/sell/actions.ts",
+      "exportedName": "updateProductAction"
+    }
+  },
   "edge": {},
   "encryptionKey": "aoy0KOgKWbX+al8TFMRoz7i0AIcUPHaa9k+qDLiE4iU="
 }

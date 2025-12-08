@@ -16,6 +16,7 @@ export type Database = {
     Tables: {
       products: {
         Row: {
+          brand: string | null
           category: string
           condition: string | null
           created_at: string
@@ -29,6 +30,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          brand?: string | null
           category: string
           condition?: string | null
           created_at?: string
@@ -42,6 +44,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          brand?: string | null
           category?: string
           condition?: string | null
           created_at?: string
