@@ -46,6 +46,7 @@ const CONDITIONS = [
 // 常見雪具品牌列表
 const BRANDS = [
     {id: 'burton', label: 'Burton'},
+    {id: 'gentemstick', label: 'Gentemstick'},
     {id: 'salomon', label: 'Salomon'},
     {id: 'atomic', label: 'Atomic'},
     {id: 'k2', label: 'K2'},
