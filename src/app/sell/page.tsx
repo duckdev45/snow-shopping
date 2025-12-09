@@ -376,7 +376,6 @@ function ProductForm() {
                         <Label htmlFor='title'>商品標題</Label>
                         <Input
                             id='title'
-                            placeholder='例如：2024 Burton Custom 全新板'
                             {...register('title')}
                         />
                         {errors.title && (
@@ -530,7 +529,6 @@ function ProductForm() {
                             <Input
                                 id='price'
                                 type='number'
-                                placeholder='8500'
                                 {...register('price')}
                             />
                             {errors.price && (
