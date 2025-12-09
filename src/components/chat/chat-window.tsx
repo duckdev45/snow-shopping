@@ -150,7 +150,7 @@ export function ChatWindow({
                     <Input
                         value={newMessage}
                         onChange={(e) => setNewMessage(e.target.value)}
-                        placeholder="輸入訊息..."
+                        placeholder="輸入訊息...."
                         className="flex-1 border-none bg-transparent shadow-none focus-visible:ring-0 text-base h-10"
                     />
 
