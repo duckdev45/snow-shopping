@@ -1,29 +1,29 @@
 import './globals.css'
-import type {Metadata} from 'next'
-import {SiteHeader} from '@/components/layout/SiteHeader'
-import {SiteFooter} from '@/components/layout/SiteFooter'
+import type { Metadata } from 'next'
+import { SiteHeader } from '@/components/layout/SiteHeader'
+import { SiteFooter } from '@/components/layout/SiteFooter'
 import React from 'react'
 
 export const metadata: Metadata = {
-    title: '雪拼 SnowShopping',
-    description: '斷捨離你的雪季回憶，為裝備找到下一段旅程。',
-    icons: {
-        icon: '/snowShopping.png',
-    },
+  title: '雪拼 SnowShopping',
+  description: '斷捨離你的雪季回憶，為裝備找到下一段旅程。',
+  icons: {
+    icon: '/snowShopping.png'
+  }
 }
 
 export default function RootLayout({
-                                       children
-                                   }: {
-    children: React.ReactNode
+  children
+}: {
+  children: React.ReactNode
 }) {
-    return (
-        <html lang='en'>
-        <body>
-        <SiteHeader/>
+  return (
+    <html lang='en'>
+      <body>
+        <SiteHeader />
         <main>{children}</main>
-        <SiteFooter/>
-        </body>
-        </html>
-    )
+        <SiteFooter />
+      </body>
+    </html>
+  )
 }
