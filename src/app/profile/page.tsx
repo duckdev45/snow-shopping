@@ -105,7 +105,7 @@ export default async function ProfilePage() {
                 {/* Tab 1: 我的商品 */}
                 <TabsContent value='listings' className='mt-6'>
                     {myListings && myListings.length > 0 ? (
-                        <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+                        <div className='grid grid-cols-2 gap-3 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5'>
                             {myListings.map((product) => (
                                 <div key={product.id} className='group relative'>
                                     <ProductCard
@@ -153,7 +153,7 @@ export default async function ProfilePage() {
                 {/* Tab 2: 收藏清單 */}
                 <TabsContent value='favorites' className='mt-6'>
                     {favoriteProducts.length > 0 ? (
-                        <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+                        <div className='grid grid-cols-2 gap-3 sm:gap-6 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5'>
                             {favoriteProducts.map((product: any) => (
                                 <ProductCard
                                     key={product.id}

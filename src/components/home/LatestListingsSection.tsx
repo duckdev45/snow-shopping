@@ -39,7 +39,8 @@ export async function LatestListingsSection() {
         <section className='pt-16 pb-10'>
             <div className='container mx-auto px-4 lg:px-6'>
                 <h2 className='mb-10 text-center text-3xl text-gray-600 font-bold'>最新上架</h2>
-                <div className='flex gap-6 overflow-x-auto pb-4 sm:grid sm:grid-cols-2 md:gap-8 lg:grid-cols-4'>
+                <div
+                    className='flex gap-6 overflow-x-auto pb-4 sm:grid sm:grid-cols-2 md:gap-8 lg:grid-cols-4 xl:grid-cols-5'>
                     {products?.map((product) => (
                         <ProductCard
                             key={product.id}

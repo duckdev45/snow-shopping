@@ -8,6 +8,7 @@ import React, {useEffect, useState} from 'react'
 import {User} from '@supabase/supabase-js'
 import {useRouter, usePathname} from 'next/navigation'
 import {createClient} from '@/lib/supabase/client'
+import {LoginModal} from '@/components/auth/login-modal'
 import {
     Ghost,
     LogOut,
@@ -193,13 +194,13 @@ export function SiteHeader() {
 
 // --- 登入按鈕 ---
     const AuthButton = () => (
-        <Link href='/login'>
+        <LoginModal>
             <button
                 className='flex items-center rounded-full bg-cyan-700 px-4 py-1.5 text-xs font-medium text-white shadow-md transition-all hover:bg-cyan-600 hover:shadow-lg active:scale-95 lg:px-6 lg:py-2 lg:text-sm'>
                 <Ghost className='mr-2 h-3 w-3 lg:h-4 lg:w-4'/>
                 登入
             </button>
-        </Link>
+        </LoginModal>
     )
 
     return (
@@ -288,11 +289,6 @@ export function SiteHeader() {
                                             </Link>
                                         </SheetClose>
 
-                                        {/* ✨ 手機版選單也加入 About */}
-                                        {/* 注意：Dialog 本身有自己的開關，不需要包 SheetClose，
-                        但為了讓點擊後手機選單不要擋住 Dialog，我們可以斟酌行為。
-                        不過 Dialog 通常會蓋在最上面 (z-index 50)，所以沒問題。
-                    */}
                                         <div className="flex items-center">
                                             <AboutDialog isMobile/>
                                         </div>

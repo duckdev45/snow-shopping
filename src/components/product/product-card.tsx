@@ -2,7 +2,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 import {Badge} from '@/components/ui/badge'
-import { MapPin} from 'lucide-react'
+import {MapPin} from 'lucide-react'
 import {cn} from '@/lib/utils'
 import {FavoriteButton} from "@/components/product/favorite-button";
 
@@ -50,7 +50,6 @@ export function ProductCard({
     return (
         <div
             className={cn(
-                // h-full 是關鍵：強制卡片高度跟隨父層 (Grid/Flex) 的高度
                 'group relative flex h-full flex-col overflow-hidden rounded-xl border border-gray-100 bg-white transition-all duration-300 hover:border-gray-200 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)]',
                 className
             )}>
@@ -64,15 +63,16 @@ export function ProductCard({
                     alt={title}
                     fill
                     className='object-cover transition-transform duration-700 ease-out group-hover:scale-105'
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                    sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
+                    /* ✨ 修改 sizes: 告訴瀏覽器手機版這張圖只佔 50vw (一半寬度)，優化效能 */
                 />
 
-                {/* 左上角：狀態標籤 */}
-                <div className='absolute top-3 left-3 z-10'>
+                {/* 左上角：狀態標籤 (縮小字體與內距) */}
+                <div className='absolute top-2 left-2 z-10'>
                     <Badge
                         variant="secondary"
                         className={cn(
-                            'border-0 px-2.5 py-0.5 text-xs font-semibold backdrop-blur-md',
+                            'border-0 px-1.5 py-0.5 text-[10px] sm:text-xs font-semibold backdrop-blur-md shadow-sm',
                             conditionInfo.color,
                             conditionInfo.textColor
                         )}>
@@ -80,51 +80,48 @@ export function ProductCard({
                     </Badge>
                 </div>
 
-                {/* 右上角：收藏按鈕 */}
-                <div className='absolute top-3 right-3 z-10'>
+                {/* 右上角：收藏按鈕 (稍微縮小) */}
+                <div className='absolute top-2 right-2 z-10'>
                     <FavoriteButton
                         productId={id}
                         initialIsFavorited={isFavorited}
                         isLoggedIn={isLoggedIn}
-                        className="h-8 w-8"
+                        className="h-7 w-7 sm:h-8 sm:w-8" // 手機版稍微小一點
                     />
                 </div>
             </Link>
 
-            {/* 2. 內容區域：使用 flex-col 讓內部元素垂直排列 */}
-            <div className='flex flex-1 flex-col p-3 sm:p-4'>
+            {/* 2. 內容區域：縮減內距 p-2.5 */}
+            <div className='flex flex-1 flex-col p-2.5 sm:p-4'>
 
                 {/* Row 1: 品牌 (左) + 地點 (右) */}
-                <div className='mb-2 flex items-center justify-between'>
-                    {/* 品牌：如果沒有品牌就顯示 placeholder 防止高度塌陷 (可選) */}
-                    <div className='text-[12px] font-bold tracking-widest text-gray-400 uppercase truncate max-w-[60%]'>
+                <div className='mb-1.5 flex items-center justify-between'>
+                    <div
+                        className='text-[10px] sm:text-[12px] font-bold tracking-widest text-gray-400 uppercase truncate max-w-[60%]'>
                         {brand ? brand.replace(/_/g, ' ') : ''}
                     </div>
 
-                    {/* 地點：移到這裡 */}
                     {location && (
-                        <div className='flex flex-shrink-0 items-center gap-1 text-[12px]  text-gray-400'>
+                        <div
+                            className='flex flex-shrink-0 items-center gap-0.5 text-[10px] sm:text-[12px] text-gray-400'>
                             <MapPin className='h-3 w-3'/>
                             <span>{location}</span>
                         </div>
                     )}
                 </div>
 
-                {/* Row 2: 標題 */}
+                {/* Row 2: 標題 (調整字級) */}
                 <Link href={`/products/${id}`} className="block mb-1">
-                    <h3 className='line-clamp-2 text-sm font-medium leading-relaxed text-gray-900 group-hover:text-black min-h-[2.5em]'>
-                        {/* min-h-[2.5em] 是一個小技巧：強制預留兩行字的高度，這樣只有一行標題的卡片也不會變矮 */}
+                    <h3 className='line-clamp-2 text-sm font-medium leading-snug text-gray-900 group-hover:text-black min-h-[2.5em]'>
                         {title}
                     </h3>
                 </Link>
 
-                {/* 中間撐開空間 (Flex Spacer) */}
-                {/* 這行很重要，它會佔據所有剩餘空間，把下方的價格推到底部 */}
                 <div className='flex-1'/>
 
-                {/* Row 3: 價格 (置右) */}
-                <div className='flex items-end justify-end border-t border-gray-50 pt-3'>
-                    <p className='font-mono text-base font-bold text-gray-900'>
+                {/* Row 3: 價格 (調整字級) */}
+                <div className='flex items-end justify-end border-t border-gray-50 pt-2 sm:pt-3'>
+                    <p className='font-mono text-sm sm:text-base font-bold text-gray-900'>
                         NT$ {price.toLocaleString()}
                     </p>
                 </div>
