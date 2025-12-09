@@ -144,9 +144,6 @@ importers:
       prettier-plugin-tailwindcss:
         specifier: ^0.6.12
         version: 0.6.12(prettier@3.5.3)
-      supabase:
-        specifier: ^2.65.6
-        version: 2.65.6
       tailwindcss:
         specifier: ^4
         version: 4.1.10
