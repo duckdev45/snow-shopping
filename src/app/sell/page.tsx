@@ -313,7 +313,7 @@ function ProductForm() {
                 </CardTitle>
             </CardHeader>
             <CardContent>
-                <form onSubmit={handleSubmit(onSubmit)} className='space-y-6'>
+                <form onSubmit={handleSubmit(onSubmit)} className='space-y-4'>
                     {/* 圖片上傳區 */}
                     <div className='space-y-2'>
                         <Label>商品照片 (最多 5 張)</Label>
@@ -568,7 +568,7 @@ function ProductForm() {
 // 最外層必須用 Suspense 包裹，因為用到了 useSearchParams
 export default function SellPage() {
     return (
-        <div className='container mx-auto max-w-2xl px-4 py-10 pt-28'>
+        <div className='container mx-auto max-w-2xl px-4 py-6 pt-26'>
             <Suspense fallback={<div className='py-20 text-center'>載入中...</div>}>
                 <>
                     <ProductForm/>

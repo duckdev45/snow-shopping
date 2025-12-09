@@ -53,43 +53,43 @@ export function ProductCard({
                 'group relative flex h-full flex-col overflow-hidden rounded-xl border border-gray-100 bg-white transition-all duration-300 hover:border-gray-200 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)]',
                 className
             )}>
+            <div className='relative'>
+                {/* 1. 圖片區域 */}
+                <Link
+                    href={`/products/${id}`}
+                    className='relative block aspect-square w-full overflow-hidden bg-gray-50'>
+                    <Image
+                        src={imageUrl || '/placeholder.png'}
+                        alt={title}
+                        fill
+                        className='object-cover transition-transform duration-700 ease-out group-hover:scale-105'
+                        sizes='(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw'
+                        /* ✨ 修改 sizes: 告訴瀏覽器手機版這張圖只佔 50vw (一半寬度)，優化效能 */
+                    />
 
-            {/* 1. 圖片區域 */}
-            <Link
-                href={`/products/${id}`}
-                className='relative block aspect-square w-full overflow-hidden bg-gray-50'>
-                <Image
-                    src={imageUrl || '/placeholder.png'}
-                    alt={title}
-                    fill
-                    className='object-cover transition-transform duration-700 ease-out group-hover:scale-105'
-                    sizes="(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw"
-                    /* ✨ 修改 sizes: 告訴瀏覽器手機版這張圖只佔 50vw (一半寬度)，優化效能 */
-                />
-
-                {/* 左上角：狀態標籤 (縮小字體與內距) */}
-                <div className='absolute top-2 left-2 z-10'>
-                    <Badge
-                        variant="secondary"
-                        className={cn(
-                            'border-0 px-1.5 py-0.5 text-[10px] sm:text-xs font-semibold backdrop-blur-md shadow-sm',
-                            conditionInfo.color,
-                            conditionInfo.textColor
-                        )}>
-                        {conditionInfo.label}
-                    </Badge>
-                </div>
-
-                {/* 右上角：收藏按鈕 (稍微縮小) */}
-                <div className='absolute top-2 right-2 z-10'>
+                    {/* 左上角：狀態標籤 (縮小字體與內距) */}
+                    <div className='absolute top-2 left-2 z-10'>
+                        <Badge
+                            variant='secondary'
+                            className={cn(
+                                'border-0 px-1.5 py-0.5 text-[10px] sm:text-xs font-semibold backdrop-blur-md shadow-sm',
+                                conditionInfo.color,
+                                conditionInfo.textColor
+                            )}>
+                            {conditionInfo.label}
+                        </Badge>
+                    </div>
+                </Link>
+                {/* 右上角：收藏按鈕 (稍微縮小) - 移到 Link 外層 */}
+                <div className='absolute top-2 right-2 z-20'>
                     <FavoriteButton
                         productId={id}
                         initialIsFavorited={isFavorited}
                         isLoggedIn={isLoggedIn}
-                        className="h-7 w-7 sm:h-8 sm:w-8" // 手機版稍微小一點
+                        className='h-7 w-7 sm:h-8 sm:w-8' // 手機版稍微小一點
                     />
                 </div>
-            </Link>
+            </div>
 
             {/* 2. 內容區域：縮減內距 p-2.5 */}
             <div className='flex flex-1 flex-col p-2.5 sm:p-4'>

@@ -7,6 +7,7 @@ import {cn} from '@/lib/utils'
 import {toggleFavoriteAction} from '@/app/actions/favorite'
 import {useRouter} from 'next/navigation'
 import {toast} from 'sonner'
+import {LoginModal} from '@/components/auth/login-modal'
 
 interface ProductDetailFavoriteButtonProps {
     productId: string
@@ -20,13 +21,14 @@ export function ProductDetailFavoriteButton({
                                                 isLoggedIn
                                             }: ProductDetailFavoriteButtonProps) {
     const [isFavorited, setIsFavorited] = useState(initialIsFavorited)
+    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
     const [isPending, startTransition] = useTransition()
     const router = useRouter()
 
     const handleToggle = async () => {
         if (!isLoggedIn) {
             toast.error('請先登入才能收藏喔！')
-            router.push('/login')
+            setIsLoginModalOpen(true)
             return
         }
 
@@ -49,22 +51,25 @@ export function ProductDetailFavoriteButton({
     }
 
     return (
-        <Button
-            variant='outline'
-            size='lg'
-            onClick={handleToggle}
-            disabled={isPending}
-            className={cn(
-                'flex-1 gap-2 transition-all duration-300 lg:flex-none',
-                isFavorited
-                    ? 'border-red-200 bg-red-50 text-red-500 hover:bg-red-100 hover:text-red-600'
-                    : 'border-gray-300 hover:border-red-200 hover:text-red-500'
-            )}
-        >
-            <Heart className={cn('h-5 w-5', isFavorited && 'fill-current')}/>
-            <span className='hidden sm:inline'>
-        {isFavorited ? '已收藏' : '收藏'}
-      </span>
-        </Button>
+        <>
+            <Button
+                variant='outline'
+                size='lg'
+                onClick={handleToggle}
+                disabled={isPending}
+                className={cn(
+                    'flex-1 gap-2 transition-all duration-300 lg:flex-none',
+                    isFavorited
+                        ? 'border-red-200 bg-red-50 text-red-500 hover:bg-red-100 hover:text-red-600'
+                        : 'border-gray-300 hover:border-red-200 hover:text-red-500'
+                )}
+            >
+                <Heart className={cn('h-5 w-5', isFavorited && 'fill-current')}/>
+                <span className='hidden sm:inline'>
+                    {isFavorited ? '已收藏' : '收藏'}
+                </span>
+            </Button>
+            <LoginModal open={isLoginModalOpen} onOpenChange={setIsLoginModalOpen} />
+        </>
     )
 }

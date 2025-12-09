@@ -1,6 +1,6 @@
 'use client'
 
-import React, {useState} from 'react'
+import React from 'react'
 import {createClient} from '@/lib/supabase/client'
 import {Button} from '@/components/ui/button'
 import {
@@ -13,15 +13,17 @@ import {
 } from '@/components/ui/dialog'
 import {TermsOfServiceDialog} from '@/components/layout/TermsOfServiceDialog'
 
-// 定義 Props，讓外部可以傳入 Trigger 按鈕
 interface LoginModalProps {
-    children?: React.ReactNode // 這就是觸發按鈕
+    children?: React.ReactNode
+    open?: boolean
+    onOpenChange?: (open: boolean) => void
 }
 
-export function LoginModal({children}: LoginModalProps) {
-    const [open, setOpen] = useState(false)
-
-    // 處理 OAuth 登入 (Google)
+export function LoginModal({
+                               children,
+                               open,
+                               onOpenChange
+                           }: LoginModalProps) {
     const handleGoogleLogin = async () => {
         const supabase = createClient()
         await supabase.auth.signInWithOAuth({
@@ -44,14 +46,10 @@ export function LoginModal({children}: LoginModalProps) {
     }
 
     return (
-        <Dialog open={open} onOpenChange={setOpen}>
-            {/* 如果有傳入 children 就當作觸發器，不然就顯示預設按鈕 */}
-            <DialogTrigger asChild>
-                {children || <Button>登入</Button>}
-            </DialogTrigger>
-
-            <DialogContent className="sm:max-w-md bg-white/95 backdrop-blur-sm">
-                <DialogHeader className='space-y-3 text-center'>
+        <Dialog open={open} onOpenChange={onOpenChange}>
+            {children && <DialogTrigger asChild>{children}</DialogTrigger>}
+            <DialogContent className='sm:max-w-[425px]'>
+                <DialogHeader className='text-center'>
                     <DialogTitle className='text-2xl font-bold tracking-tight'>
                         歡迎回到雪拼
                     </DialogTitle>

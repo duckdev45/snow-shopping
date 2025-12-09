@@ -1,4 +1,3 @@
-import {redirect} from 'next/navigation'
 import Link from 'next/link'
 import {createClient} from '@/lib/supabase/server'
 import {ProductCard} from '@/components/product/product-card' //
@@ -9,6 +8,7 @@ import {Badge} from '@/components/ui/badge'
 import {Package, Heart} from 'lucide-react'
 import {EditProfileDialog} from './EditProfileDialog'
 import {ProductItemActions} from './ProductItemActions'
+import ProfileUnauthorized from './ProfileUnauthorized'
 
 export default async function ProfilePage() {
     const supabase = await createClient()
@@ -18,7 +18,7 @@ export default async function ProfilePage() {
         data: {user}
     } = await supabase.auth.getUser()
     if (!user) {
-        redirect('/login')
+        return <ProfileUnauthorized />
     }
 
     // 2. 抓取 Profile 資料

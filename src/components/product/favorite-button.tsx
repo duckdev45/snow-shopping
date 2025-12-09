@@ -7,6 +7,7 @@ import {cn} from '@/lib/utils'
 import {toggleFavoriteAction} from '@/app/actions/favorite'
 import {useRouter} from 'next/navigation'
 import {toast} from 'sonner'
+import {LoginModal} from '@/components/auth/login-modal'
 
 interface FavoriteButtonProps {
     productId: string
@@ -22,6 +23,7 @@ export function FavoriteButton({
                                    isLoggedIn = false
                                }: FavoriteButtonProps) {
     const [isFavorited, setIsFavorited] = useState(initialIsFavorited)
+    const [isLoginModalOpen, setIsLoginModalOpen] = useState(false)
     const [isPending, startTransition] = useTransition()
     const router = useRouter()
 
@@ -31,7 +33,7 @@ export function FavoriteButton({
 
         if (!isLoggedIn) {
             toast.error('請先登入才能收藏喔！')
-            router.push('/login')
+            setIsLoginModalOpen(true)
             return
         }
 
@@ -53,18 +55,21 @@ export function FavoriteButton({
     }
 
     return (
-        <Button
-            size='icon'
-            variant='ghost'
-            onClick={handleToggle}
-            disabled={isPending}
-            className={cn(
-                'rounded-full bg-white/70 backdrop-blur-sm transition-all hover:scale-110 active:scale-95',
-                isFavorited ? 'text-red-500 hover:text-red-600' : 'text-gray-500 hover:text-red-500 hover:bg-white',
-                className
-            )}
-        >
-            <Heart className={cn('h-5 w-5', isFavorited && 'fill-current')}/>
-        </Button>
+        <>
+            <Button
+                size='icon'
+                variant='ghost'
+                onClick={handleToggle}
+                disabled={isPending}
+                className={cn(
+                    'rounded-full bg-white/70 backdrop-blur-sm transition-all hover:scale-110 active:scale-95',
+                    isFavorited ? 'text-red-500 hover:text-red-600' : 'text-gray-500 hover:text-red-500 hover:bg-white',
+                    className
+                )}
+            >
+                <Heart className={cn('h-5 w-5', isFavorited && 'fill-current')}/>
+            </Button>
+            <LoginModal open={isLoginModalOpen} onOpenChange={setIsLoginModalOpen}/>
+        </>
     )
 }
