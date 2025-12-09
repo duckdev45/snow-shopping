@@ -1,11 +1,12 @@
-import Link from 'next/link'
-import {ProductCard} from '@/components/ui/product-card'
+import {ProductCard} from '@/components/product/product-card'
 import {createClient} from '@/lib/supabase/server'
-import {Button} from '@/components/ui/button'
 
 // 這裡改成 async function
 export async function LatestListingsSection() {
     const supabase = await createClient()
+
+    // 取得當前使用者 (for search收藏)
+    const {data: {user}} = await supabase.auth.getUser()
 
     // 從 DB 撈最新 10 筆 active 的商品
     const {data: products, error} = await supabase
@@ -19,6 +20,19 @@ export async function LatestListingsSection() {
         console.error('Error fetching products:', error)
         // 這裡可以做個錯誤處理 UI，或是回傳 null
         return null
+    }
+
+    // 查詢使用者的收藏清單 ID
+    let favoritedProductIds = new Set<string>()
+    if (user) {
+        const {data: favorites} = await supabase
+            .from('favorites')
+            .select('product_id')
+            .eq('user_id', user.id)
+
+        if (favorites) {
+            favorites.forEach(f => favoritedProductIds.add(f.product_id))
+        }
     }
 
     return (
@@ -37,6 +51,8 @@ export async function LatestListingsSection() {
                             imageUrl={product.images?.[0] || '/placeholder.png'}
                             brand={product.brand}
                             location={product.location}
+                            isFavorited={favoritedProductIds.has(product.id)}
+                            isLoggedIn={!!user}
                             className='w-[200px] flex-shrink-0 sm:w-auto'
                         />
                     ))}

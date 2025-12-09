@@ -2,9 +2,9 @@ import Image from 'next/image'
 import Link from 'next/link'
 import React from 'react'
 import {Badge} from '@/components/ui/badge'
-import {Button} from '@/components/ui/button'
-import {Heart, MapPin} from 'lucide-react'
+import { MapPin} from 'lucide-react'
 import {cn} from '@/lib/utils'
+import {FavoriteButton} from "@/components/product/favorite-button";
 
 interface ProductCardProps {
     id: string
@@ -18,6 +18,8 @@ interface ProductCardProps {
     sellerAvatar?: string
     location?: string
     className?: string
+    isFavorited?: boolean
+    isLoggedIn?: boolean
 }
 
 const CONDITION_MAP: Record<string, { label: string; color: string; textColor: string }> = {
@@ -35,6 +37,8 @@ export function ProductCard({
                                 condition,
                                 brand,
                                 location,
+                                isFavorited = false,
+                                isLoggedIn = false,
                                 className
                             }: ProductCardProps) {
     const conditionInfo = CONDITION_MAP[condition] || {
@@ -78,12 +82,12 @@ export function ProductCard({
 
                 {/* 右上角：收藏按鈕 */}
                 <div className='absolute top-3 right-3 z-10'>
-                    <Button
-                        size='icon'
-                        variant='ghost'
-                        className='h-8 w-8 rounded-full bg-white/70 text-gray-500 backdrop-blur-sm transition-all hover:bg-white hover:text-red-500 hover:scale-110 active:scale-95'>
-                        <Heart className='h-4 w-4'/>
-                    </Button>
+                    <FavoriteButton
+                        productId={id}
+                        initialIsFavorited={isFavorited}
+                        isLoggedIn={isLoggedIn}
+                        className="h-8 w-8"
+                    />
                 </div>
             </Link>
 

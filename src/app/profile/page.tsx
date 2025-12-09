@@ -1,7 +1,7 @@
 import {redirect} from 'next/navigation'
 import Link from 'next/link'
 import {createClient} from '@/lib/supabase/server'
-import {ProductCard} from '@/components/ui/product-card' //
+import {ProductCard} from '@/components/product/product-card' //
 import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar'
 import {Button} from '@/components/ui/button'
 import {Tabs, TabsContent, TabsList, TabsTrigger} from '@/components/ui/tabs'
@@ -35,8 +35,20 @@ export default async function ProfilePage() {
         .eq('seller_id', user.id)
         .order('created_at', {ascending: false})
 
-    // 4. (選配) 抓取「我的收藏」
-    // 這邊需要你之後建一個 `favorites` table 才能用，先留個位子
+    // 4抓取「我的收藏」 (透過 join 查詢 products)
+    const {data: myFavorites} = await supabase
+        .from('favorites')
+        .select(`
+            product_id,
+            products (*) 
+        `)
+        .eq('user_id', user.id)
+        .order('created_at', {ascending: false})
+
+    // 整理一下資料結構，因為上面抓出來會是 { product_id: ..., products: { ... } }
+    // 我們需要把 products 拿出來變成一個陣列，並過濾掉可能已被刪除的商品
+    const favoriteProducts = myFavorites?.map(f => f.products).filter(p => p !== null) || []
+    const favoritedProductIds = new Set(myFavorites?.map(f => f.product_id) || [])
 
     return (
         <div className='container mx-auto min-h-screen px-4 pt-28 pb-10 lg:px-6'>
@@ -105,6 +117,8 @@ export default async function ProfilePage() {
                                         imageUrl={product.images?.[0]}
                                         brand={product.brand}
                                         location={product.location}
+                                        isFavorited={favoritedProductIds.has(product.id)}
+                                        isLoggedIn={true}
                                     />
 
                                     {/* 判斷一下狀態，如果已經下架了，可以給個不同的樣式，或者直接蓋上遮罩 */}
@@ -136,12 +150,35 @@ export default async function ProfilePage() {
                     )}
                 </TabsContent>
 
-                {/* Tab 2: 收藏 (先放個 Placeholder) */}
+                {/* Tab 2: 收藏清單 */}
                 <TabsContent value='favorites' className='mt-6'>
-                    <div className='flex flex-col items-center justify-center py-12 text-center text-gray-500'>
-                        <Heart className='mb-4 h-12 w-12 text-gray-300'/>
-                        <p>收藏功能即將上線，敬請期待！</p>
-                    </div>
+                    {favoriteProducts.length > 0 ? (
+                        <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4'>
+                            {favoriteProducts.map((product: any) => (
+                                <ProductCard
+                                    key={product.id}
+                                    id={product.id}
+                                    title={product.title}
+                                    category={product.category}
+                                    price={product.price}
+                                    condition={product.condition}
+                                    imageUrl={product.images?.[0]}
+                                    brand={product.brand}
+                                    location={product.location}
+                                    isFavorited={true}
+                                    isLoggedIn={true}
+                                />
+                            ))}
+                        </div>
+                    ) : (
+                        <div className='flex flex-col items-center justify-center py-12 text-center text-gray-500'>
+                            <Heart className='mb-4 h-12 w-12 text-gray-300'/>
+                            <p>你還沒有收藏任何裝備喔！</p>
+                            <Button variant="link" asChild className="mt-2">
+                                <Link href="/browse">去逛逛</Link>
+                            </Button>
+                        </div>
+                    )}
                 </TabsContent>
             </Tabs>
         </div>

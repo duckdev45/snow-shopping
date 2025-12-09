@@ -1,5 +1,5 @@
 import {createClient} from '@/lib/supabase/server'
-import {ProductCard} from '@/components/ui/product-card'
+import {ProductCard} from '@/components/product/product-card'
 import {FilterSidebar} from '@/app/browse/FilterSidebar'
 import {SortSelect} from '@/app/browse/SortSelect'
 import {Ghost} from 'lucide-react'
@@ -61,12 +61,28 @@ export default async function BrowsePage({searchParams}: BrowsePageProps) {
             break
     }
 
-    // 3. 執行查詢
+    // 取得當前使用者 (for search收藏)
+    const {data: {user}} = await supabase.auth.getUser()
+
+    // 查詢商品邏輯
     const {data: products, error} = await query
 
     if (error) {
         console.error('Error fetching products:', error)
         return <div>載入失敗，請稍後再試</div>
+    }
+
+    // 查詢使用者的收藏清單 ID
+    let favoritedProductIds = new Set<string>()
+    if (user) {
+        const {data: favorites} = await supabase
+            .from('favorites')
+            .select('product_id')
+            .eq('user_id', user.id)
+
+        if (favorites) {
+            favorites.forEach(f => favoritedProductIds.add(f.product_id))
+        }
     }
 
     return (
@@ -83,7 +99,7 @@ export default async function BrowsePage({searchParams}: BrowsePageProps) {
                 </div>
                 <div className='flex items-center gap-2'>
                     {/* 手機版篩選按鈕會出現在這裡 */}
-                    <div className='lg:hidden'>
+                    <div className='lg:hidden '>
                         <FilterSidebar/>
                     </div>
                     <SortSelect/>
@@ -111,6 +127,8 @@ export default async function BrowsePage({searchParams}: BrowsePageProps) {
                                     imageUrl={product.images?.[0] || '/placeholder.png'}
                                     brand={product.brand}
                                     location={product.location}
+                                    isFavorited={favoritedProductIds.has(product.id)}
+                                    isLoggedIn={!!user}
                                 />
                             ))}
                         </div>
