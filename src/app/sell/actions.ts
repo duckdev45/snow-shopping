@@ -36,6 +36,7 @@ export async function createProductAction(data: ProductFormData) {
             status: 'active', // 預設上架中
             brand: result.data.brand,
             location: result.data.location,
+            ski_resort: result.data.ski_resort,
         })
         .select()
         .single()
@@ -44,6 +45,11 @@ export async function createProductAction(data: ProductFormData) {
         console.error('Insert Error:', error)
         return {success: false, error: '資料庫寫入失敗'}
     }
+
+    // 通知相關頁面重新抓資料
+    revalidatePath('/browse')
+    revalidatePath('/profile')
+    revalidatePath('/')
 
     // 4. 回傳成功 ID
     return {success: true, id: product.id}
@@ -82,6 +88,7 @@ export async function updateProductAction(
             images: result.data.images,
             brand: result.data.brand,
             location: result.data.location,
+            ski_resort: result.data.ski_resort,
             updated_at: new Date().toISOString() // 更新時間
         })
         .eq('id', productId)
@@ -91,6 +98,12 @@ export async function updateProductAction(
         console.error('Update Error:', error)
         return {success: false, error: '更新失敗'}
     }
+
+    // 通知相關頁面重新抓資料
+    revalidatePath('/browse')
+    revalidatePath('/profile')
+    revalidatePath(`/products/${productId}`) // 更新該商品詳情頁
+    revalidatePath('/')
 
     return {success: true, id: productId}
 }

@@ -16,11 +16,9 @@ import {
     Menu,
     Snowflake,
     Ticket,
-    Info, // ✨ 新增 Info icon
-    Coffee // ✨ 新增 Coffee icon (代表抖內)
+    Info,
 } from 'lucide-react'
 
-// Shadcn UI Components
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -46,7 +44,7 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "@/components/ui/dialog" // ✨ 引入 Dialog
+} from "@/components/ui/dialog"
 
 export function SiteHeader() {
     const logoSrc = '/snowShopping.png'
@@ -106,7 +104,7 @@ export function SiteHeader() {
                         關於雪拼 SnowShopping
                     </DialogTitle>
                     <DialogDescription className="text-base pt-1">
-                        Hello, 我是雪拼的開發者 Duck 🐤
+                        Hello, 我是網站開發者 Duck 🐤
                     </DialogDescription>
                 </DialogHeader>
 
@@ -116,8 +114,7 @@ export function SiteHeader() {
                     </p>
                     <p className="text-sm text-gray-600 leading-relaxed">
                         如果你/妳覺得網站還不錯用，或是順利交易了裝備 🎉<br/>
-                        能<b>「請我喝杯珍奶」</b>！就更感謝支持了<br/>
-                        這杯珍奶不只能補充我的糖分，更是我半夜修 Bug、開發新功能的燃料（aka 熬夜動力）
+                        能<b>「請我喝杯珍奶」</b>！就更感謝惹<br/>
                     </p>
                     <p className="text-sm font-medium text-gray-900">
                         有想許願的新功能也可以在抖內的時候偷偷跟我說喔<br/>
@@ -131,7 +128,7 @@ export function SiteHeader() {
                         href="https://duckdev45.bobaboba.me"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="flex items-center justify-center w-[180px] h-[48px] bg-[#CCA78C] text-white rounded-xl shadow-lg hover:bg-[#b8957a] hover:scale-105 transition-all duration-200 active:scale-95"
+                        className="flex items-center justify-center w-[180px] h-[48px] bg-[#CCA78C] text-white rounded-xl shadow-lg hover:bg-[#b8957a] hover:scale-125 transition-all duration-200 active:scale-95"
                     >
                         <img
                             src="https://s3.ap-southeast-1.amazonaws.com/media.anyonelab.com/images/boba/boba-embed-icon.png"

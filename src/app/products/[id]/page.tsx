@@ -24,8 +24,8 @@ const CATEGORY_MAP: Record<string, string> = {
   goggles: '雪鏡',
   helmet: '安全帽',
   apparel: '雪衣褲',
-  'lift-ticket': '雪票',
-  other: '其他'
+  'lift-ticket': '纜車票',
+  other: '其他/護具'
 }
 
 const CONDITION_MAP: Record<string, string> = {

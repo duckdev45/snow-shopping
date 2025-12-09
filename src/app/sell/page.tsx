@@ -32,8 +32,8 @@ const CATEGORIES = [
     {id: 'helmet', label: '安全帽'},
     {id: 'gloves', label: '手套'},
     {id: 'boots', label: '雪鞋'},
-    {id: 'lift-ticket', label: '雪票'},
-    {id: 'other', label: '其他'}
+    {id: 'lift-ticket', label: '纜車票'},
+    {id: 'other', label: '其他/護具'}
 ]
 
 const CONDITIONS = [
@@ -73,6 +73,21 @@ const BRANDS = [
     {id: 'arcteryx', label: "Arc'teryx"},
     {id: 'other', label: '其他 / Other'},
 ]
+
+// 日本雪場列表
+const JAPAN_SKI_RESORTS = [
+    {id: 'niseko', label: '二世谷 (Niseko)'},
+    {id: 'hakuba', label: '白馬 (Hakuba)'},
+    {id: 'rusutsu', label: '留壽都 (Rusutsu)'},
+    {id: 'kiroro', label: '喜樂樂 (Kiroro)'},
+    {id: 'furano', label: '富良野 (Furano)'},
+    {id: 'shiga_kogen', label: '志賀高原 (Shiga Kogen)'},
+    {id: 'myoko', label: '妙高 (Myoko)'},
+    {id: 'gala_yuzawa', label: 'Gala 湯澤 (Gasla Yuzawa)'},
+    {id: 'appikogen', label: '安比高原 (Appi Kogen)'},
+    {id: 'z_ao', label: '藏王 (Zao)'},
+    {id: 'other_japan', label: '其他雪場'},
+];
 
 // 台灣縣市列表
 const LOCATIONS = [
@@ -129,6 +144,8 @@ function ProductForm() {
 
     // 監聽圖片欄位 (這裡面會混合「舊的 https://」和「新的 blob:」)
     const currentImages = watch('images')
+    const selectedCategory = watch('category'); // 監聽分類
+    const isLiftTicket = selectedCategory === 'lift-ticket'; // 判斷是否為纜車票
 
     // 1. 如果是編輯模式，載入舊資料
     useEffect(() => {
@@ -136,7 +153,7 @@ function ProductForm() {
 
         const fetchProduct = async () => {
             setFetching(true)
-            const {data, error} = await supabase
+            const {data} = await supabase
                 .from('products')
                 .select('*')
                 .eq('id', editId)
@@ -150,7 +167,8 @@ function ProductForm() {
                     price: data.price,
                     category: data.category as any,
                     condition: data.condition as any,
-                    images: data.images || [] // 舊圖片 URL
+                    images: data.images || [], // 舊圖片 URL
+                    ski_resort: data.ski_resort || undefined, // 回填雪場
                 })
             }
             setFetching(false)
@@ -242,7 +260,12 @@ function ProductForm() {
 
             const finalData = {
                 ...data,
-                images: finalImages
+                images: finalImages,
+                // 如果不是纜車票，則清空 ski_resort
+                ski_resort: isLiftTicket ? data.ski_resort : null,
+                // 如果是纜車票，則清空 condition 和 brand
+                condition: isLiftTicket ? null : data.condition,
+                brand: isLiftTicket ? null : data.brand,
             }
 
             // C. 呼叫 Server Action (新增 or 更新)
@@ -255,17 +278,19 @@ function ProductForm() {
                 }
 
                 if (result.success) {
-                    router.push(`/products/${result.id}`)
-                    router.refresh() // 強制刷新
+                    router.push('/browse')
+
+                    router.refresh()
                 } else {
                     alert(`操作失敗 QQ: ${result.error}`)
                 }
+
+                setUploading(false)
             })
         } catch (error) {
             console.error('Upload failed:', error)
             alert('圖片上傳失敗，請檢查網路或圖片大小')
-        } finally {
-            setUploading(false)
+            setUploading(false); // 圖片上傳失敗也要重置狀態
         }
     }
 
@@ -350,7 +375,7 @@ function ProductForm() {
                         )}
                     </div>
 
-                    <div className='grid grid-cols-2 gap-4 md:grid-cols-4'>
+                    <div className='grid grid-cols-2 gap-4 md:grid-cols-3'>
                         <div className='space-y-2'>
                             <Label>分類</Label>
                             <Select
@@ -375,29 +400,58 @@ function ProductForm() {
                             )}
                         </div>
 
-                        <div className='space-y-2'>
-                            <Label>裝備狀況</Label>
-                            <Select
-                                onValueChange={(val) => setValue('condition', val as any)}
-                                defaultValue={watch('condition')}
-                                value={watch('condition')}>
-                                <SelectTrigger>
-                                    <SelectValue placeholder='選擇狀況'/>
-                                </SelectTrigger>
-                                <SelectContent>
-                                    {CONDITIONS.map((c) => (
-                                        <SelectItem key={c.id} value={c.id}>
-                                            {c.label}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                            {errors.condition && (
-                                <p className='text-sm text-red-500'>
-                                    {errors.condition.message}
-                                </p>
-                            )}
-                        </div>
+                        {/* 裝備狀況 (條件式渲染) */}
+                        {!isLiftTicket && (
+                            <div className='space-y-2'>
+                                <Label>裝備狀況</Label>
+                                <Select
+                                    onValueChange={(val) => setValue('condition', val as any)}
+                                    defaultValue={watch('condition') || ''}
+                                    value={watch('condition') || ''}>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder='選擇狀況'/>
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                        {CONDITIONS.map((c) => (
+                                            <SelectItem key={c.id} value={c.id}>
+                                                {c.label}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                                {errors.condition && (
+                                    <p className='text-sm text-red-500'>
+                                        {errors.condition.message}
+                                    </p>
+                                )}
+                            </div>
+                        )}
+
+                        {/* 雪場選單 */}
+                        {isLiftTicket && (
+                            <div className='space-y-2'>
+                                <Label>雪場</Label>
+                                <Select
+                                    onValueChange={(val) => setValue('ski_resort', val)}
+                                    defaultValue={watch('ski_resort') || ''}
+                                    value={watch('ski_resort') || ''}>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder='選擇雪場'/>
+                                    </SelectTrigger>
+                                    <SelectContent className="max-h-[300px]">
+                                        {JAPAN_SKI_RESORTS.map((resort) => (
+                                            <SelectItem key={resort.id} value={resort.id}>
+                                                {resort.label}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                                {errors.ski_resort && (
+                                    <p className='text-sm text-red-500'>{errors.ski_resort.message}</p>
+                                )}
+                            </div>
+                        )}
+
                         {/* 地點 */}
                         <div className='space-y-2'>
                             <Label>地點</Label>
@@ -433,29 +487,32 @@ function ProductForm() {
                     </div>
                     <div className='grid grid-cols-2 gap-4'>
 
-                        <div className='space-y-2'>
-                            <Label>品牌</Label>
-                            <Select
-                                onValueChange={(val) => setValue('brand', val)}
-                                // 如果有舊資料(編輯模式)，記得要回填
-                                defaultValue={watch('brand') || ''}
-                                value={watch('brand')}>
-                                <SelectTrigger>
-                                    <SelectValue placeholder='選擇品牌'/>
-                                </SelectTrigger>
-                                <SelectContent className="max-h-[300px]">
-                                    {BRANDS.map((b) => (
-                                        <SelectItem key={b.id} value={b.id}>
-                                            {b.label}
-                                        </SelectItem>
-                                    ))}
-                                </SelectContent>
-                            </Select>
-                            {/* 記得去 Zod Schema 加 brand 欄位，不然這裡會報錯 */}
-                            {errors.brand && (
-                                <p className='text-sm text-red-500'>{errors.brand.message}</p>
-                            )}
-                        </div>
+                        {/* 品牌 (條件式渲染) */}
+                        {!isLiftTicket && (
+                            <div className='space-y-2'>
+                                <Label>品牌</Label>
+                                <Select
+                                    onValueChange={(val) => setValue('brand', val)}
+                                    // 如果有舊資料(編輯模式)，記得要回填
+                                    defaultValue={watch('brand') || ''}
+                                    value={watch('brand') || ''}>
+                                    <SelectTrigger>
+                                        <SelectValue placeholder='選擇品牌'/>
+                                    </SelectTrigger>
+                                    <SelectContent className="max-h-[300px]">
+                                        {BRANDS.map((b) => (
+                                            <SelectItem key={b.id} value={b.id}>
+                                                {b.label}
+                                            </SelectItem>
+                                        ))}
+                                    </SelectContent>
+                                </Select>
+                                {/* 記得去 Zod Schema 加 brand 欄位，不然這裡會報錯 */}
+                                {errors.brand && (
+                                    <p className='text-sm text-red-500'>{errors.brand.message}</p>
+                                )}
+                            </div>
+                        )}
                         <div className='space-y-2'>
                             <Label htmlFor='price'>價格 (NT$)</Label>
                             <Input
@@ -487,7 +544,7 @@ function ProductForm() {
 
                     <Button
                         type='submit'
-                        className='h-12 w-full bg-blue-600 text-lg hover:bg-blue-700'
+                        className='h-12 w-full bg-cyan-500 text-lg hover:bg-cyan-700'
                         disabled={isPending || uploading}>
                         {uploading ? (
                             <>

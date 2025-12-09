@@ -78,7 +78,7 @@ export default async function BrowsePage({searchParams}: BrowsePageProps) {
                         {searchQuery ? `"${searchQuery}" 的搜尋結果` : '探索裝備'}
                     </h1>
                     <p className='mt-1 text-sm text-gray-500'>
-                        共找到 {products?.length || 0} 件好貨
+                        共找到 {products?.length || 0} 個結果
                     </p>
                 </div>
                 <div className='flex items-center gap-2'>

@@ -7,13 +7,13 @@ import {Button} from '@/components/ui/button'
 export async function LatestListingsSection() {
     const supabase = await createClient()
 
-    // 直接從 DB 撈最新 4 筆 active 的商品
+    // 從 DB 撈最新 10 筆 active 的商品
     const {data: products, error} = await supabase
         .from('products')
         .select('*')
         .eq('status', 'active')
         .order('created_at', {ascending: false})
-        .limit(4)
+        .limit(10)
 
     if (error) {
         console.error('Error fetching products:', error)
@@ -22,10 +22,10 @@ export async function LatestListingsSection() {
     }
 
     return (
-        <section className='py-16'>
+        <section className='pt-16 pb-10'>
             <div className='container mx-auto px-4 lg:px-6'>
-                <h2 className='mb-10 text-center text-3xl font-bold'>最新上架</h2>
-                <div className='grid grid-cols-1 gap-6 sm:grid-cols-2 md:gap-8 lg:grid-cols-4'>
+                <h2 className='mb-10 text-center text-3xl text-gray-600 font-bold'>最新上架</h2>
+                <div className='flex gap-6 overflow-x-auto pb-4 sm:grid sm:grid-cols-2 md:gap-8 lg:grid-cols-4'>
                     {products?.map((product) => (
                         <ProductCard
                             key={product.id}
@@ -37,6 +37,7 @@ export async function LatestListingsSection() {
                             imageUrl={product.images?.[0] || '/placeholder.png'}
                             brand={product.brand}
                             location={product.location}
+                            className='w-[200px] flex-shrink-0 sm:w-auto'
                         />
                     ))}
                 </div>
@@ -47,14 +48,6 @@ export async function LatestListingsSection() {
                         目前沒有上架商品，快來當第一個賣家！
                     </div>
                 )}
-
-                <div className='mt-12 text-center'>
-                    <Button
-                        asChild
-                        className='rounded-full bg-blue-600 px-8 py-3 text-base font-semibold text-white shadow-lg transition-colors hover:bg-blue-700'>
-                        <Link href='/browse'>瀏覽所有裝備</Link>
-                    </Button>
-                </div>
             </div>
         </section>
     )
