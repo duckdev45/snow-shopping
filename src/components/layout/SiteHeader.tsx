@@ -112,17 +112,17 @@ export function SiteHeader() {
         </DialogHeader>
 
         <div className='grid gap-4 py-2'>
-          <p className='text-sm leading-relaxed text-gray-600'>
+          <p className='text-[13px] text-gray-600'>
             開發這個網站就像滑雪一樣，雖然快樂但也有點開銷
             <br />
             （Server 費、網域費、還有一些隱形成本...💸）
           </p>
-          <p className='text-sm leading-relaxed text-gray-600'>
-            如果你/妳覺得網站還不錯用，或是順利交易了裝備 🎉
-            <br />能<b>「請我喝杯珍奶」</b>！就更感謝惹
+          <p className='text-[13px] text-gray-600'>
+            如果你/妳覺得網站還不錯用，或是順利交易了裝備
+            <br />能<b>「請我喝杯珍奶」</b>！就更感謝惹 🎉
             <br />
           </p>
-          <p className='text-sm font-medium text-gray-900'>
+          <p className='text-[13px] font-medium text-gray-900'>
             有想許願的新功能也可以在抖內的時候偷偷跟我說喔
             <br />
             讓我們一起讓雪拼變得更好滑...（誤），是更好用！✨
