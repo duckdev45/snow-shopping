@@ -1,18 +1,12 @@
-# .github/workflows/ci.yml
-
-# Workflow 的名稱
 name: 雪拼 CI/CD
 
-# 觸發條件：當推送到 main 分支，或對 main 分支發起 Pull Request 時觸發
 on:
   push:
     branches: ['main']
   pull_request:
     branches: ['main']
 
-# 工作流程執行的內容
 jobs:
-  # 第一個工作：建置與測試
   build-and-test:
     runs-on: ubuntu-latest
     steps:
@@ -27,21 +21,18 @@ jobs:
           cache: 'pnpm'
       - name: 安裝依賴套件
         run: pnpm install
-      - name: 檢查程式碼風格 (ESLint)
-        run: pnpm --filter web lint
-      - name: 建置專案 (Build)
-        # 建置 web 專案來確認它沒問題
-        run: pnpm --filter web build
 
-  # 第二個工作：部署到 GitHub Pages
+      - name: 檢查程式碼風格 (ESLint)
+        run: pnpm lint
+
+      - name: 建置專案 (Build)
+        run: pnpm build
+
   deploy:
-    # 這個工作需要 'build-and-test' 工作成功完成
     needs: build-and-test
-    # 只有在 push 到 main 分支時才執行，PR 不執行
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
 
-    # 給予這個工作寫入 repo 的權限，來發佈 Pages
     permissions:
       contents: read
       pages: write
@@ -60,14 +51,13 @@ jobs:
       - name: 安裝依賴套件
         run: pnpm install
 
-      # 為了部署到 GitHub Pages，可能需要設定 base path
-      # 這一步是修改 Next.js 設定，讓它知道子目錄的路徑
+      # 指向根目錄的 next.config.js
       - name: 設定 Next.js base path for GitHub Pages
         run: |
-          sed -i "s|output: 'export',|output: 'export',\n  basePath: '/${{ github.event.repository.name }}',|g" apps/web/next.config.mjs
+          sed -i "s|output: 'export',|output: 'export',\n  basePath: '/${{ github.event.repository.name }}',|g" next.config.js
 
       - name: 建置靜態網站 (Build Static Site)
-        run: pnpm --filter web build
+        run: pnpm build
 
       - name: 設定 GitHub Pages
         uses: actions/configure-pages@v5
@@ -75,8 +65,7 @@ jobs:
       - name: 上傳部署用的成品 (Upload Artifact)
         uses: actions/upload-pages-artifact@v3
         with:
-          # 把打包好的靜態網站 (在 apps/web/out) 上傳
-          path: ./apps/web/out
+          path: ./out
 
       - name: 部署到 GitHub Pages
         id: deployment
