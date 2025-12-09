@@ -2,71 +2,31 @@ name: 雪拼 CI/CD
 
 on:
   push:
-    branches: ['main']
+    branches: [ 'main' ]
   pull_request:
-    branches: ['main']
+    branches: [ 'main' ]
 
 jobs:
-  build-and-test:
+  quality-check:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout 專案原始碼
         uses: actions/checkout@v4
+
       - name: 安裝 pnpm
         uses: pnpm/action-setup@v4
+
       - name: 設定 Node.js 環境
         uses: actions/setup-node@v4
         with:
           node-version: '20'
           cache: 'pnpm'
+
       - name: 安裝依賴套件
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
+
+      - name: 檢查 TypeScript 型別 (Type Check)
+        run: pnpm --filter web exec tsc --noEmit
 
       - name: 檢查程式碼風格 (ESLint)
-        run: pnpm lint
-
-      - name: 建置專案 (Build)
-        run: pnpm build
-
-  deploy:
-    needs: build-and-test
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-
-    permissions:
-      contents: read
-      pages: write
-      id-token: write
-
-    steps:
-      - name: Checkout 專案原始碼
-        uses: actions/checkout@v4
-      - name: 安裝 pnpm
-        uses: pnpm/action-setup@v4
-      - name: 設定 Node.js 環境
-        uses: actions/setup-node@v4
-        with:
-          node-version: '20'
-          cache: 'pnpm'
-      - name: 安裝依賴套件
-        run: pnpm install
-
-      # 指向根目錄的 next.config.js
-      - name: 設定 Next.js base path for GitHub Pages
-        run: |
-          sed -i "s|output: 'export',|output: 'export',\n  basePath: '/${{ github.event.repository.name }}',|g" next.config.js
-
-      - name: 建置靜態網站 (Build Static Site)
-        run: pnpm build
-
-      - name: 設定 GitHub Pages
-        uses: actions/configure-pages@v5
-
-      - name: 上傳部署用的成品 (Upload Artifact)
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./out
-
-      - name: 部署到 GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v4
+        run: pnpm --filter web lint
