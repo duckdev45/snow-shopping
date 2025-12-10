@@ -241,11 +241,11 @@ function ProductForm() {
 
             // 設定壓縮參數
             const compressionOptions = {
-                maxSizeMB: 0.8,          // 限制最大檔案大小 (MB)
-                maxWidthOrHeight: 1920,  // 限制最大寬高 (px)
+                maxSizeMB: 0.5,          // 限制最大檔案大小 (MB)
+                maxWidthOrHeight: 1280,  // 限制最大寬高 (px)
                 useWebWorker: true,      // 開多執行緒處理，不卡頓 UI
                 fileType: 'image/webp',  // 強制轉 WebP
-                initialQuality: 0.8      // 品質 80%
+                initialQuality: 0.7      // 品質 70%
             }
 
             for (const entry of newFiles) {
