@@ -121,6 +121,7 @@ export default async function ProfilePage() {
                                         condition={product.condition}
                                         imageUrl={product.images?.[0]}
                                         brand={product.brand}
+                                        ski_resort={product.ski_resort}
                                         location={product.location}
                                         isFavorited={favoritedProductIds.has(product.id)}
                                         isLoggedIn={true}
@@ -170,6 +171,7 @@ export default async function ProfilePage() {
                                     condition={product.condition}
                                     imageUrl={product.images?.[0]}
                                     brand={product.brand}
+                                    ski_resort={product.ski_resort}
                                     location={product.location}
                                     isFavorited={true}
                                     isLoggedIn={true}

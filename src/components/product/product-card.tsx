@@ -5,6 +5,9 @@ import {Badge} from '@/components/ui/badge'
 import {MapPin} from 'lucide-react'
 import {cn} from '@/lib/utils'
 import {FavoriteButton} from '@/components/product/favorite-button'
+import {JAPAN_SKI_RESORTS} from "@/lib/constants";
+
+const skiResortLabelMap = new Map(JAPAN_SKI_RESORTS.map(resort => [resort.id, resort.label]));
 
 interface ProductCardProps {
     id: string
@@ -14,6 +17,7 @@ interface ProductCardProps {
     category: string
     condition: string
     brand?: string
+    ski_resort?: string
     sellerName?: string
     sellerAvatar?: string
     location?: string
@@ -44,6 +48,7 @@ export function ProductCard({
                                 imageUrl,
                                 condition,
                                 brand,
+                                ski_resort,
                                 location,
                                 isFavorited = false,
                                 isLoggedIn = false,
@@ -54,6 +59,10 @@ export function ProductCard({
         label: '二手',
         color: 'bg-gray-100',
         textColor: 'text-gray-600'
+    }
+
+    const getSkiResortLabel = (skiResortId: string) => {
+        return skiResortLabelMap.get(skiResortId) || skiResortId.replace(/_/g, ' ');
     }
 
     return (
@@ -108,7 +117,11 @@ export function ProductCard({
                 <div className='mb-1.5 flex items-center justify-between'>
                     <div
                         className='max-w-[60%] truncate text-[10px] font-bold tracking-widest text-gray-400 uppercase sm:text-[12px]'>
-                        {brand ? brand.replace(/_/g, ' ') : ''}
+                        {ski_resort
+                            ? getSkiResortLabel(ski_resort)
+                            : brand
+                                ? brand.replace(/_/g, ' ')
+                                : ''}
                     </div>
 
                     {location && (

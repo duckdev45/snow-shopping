@@ -21,6 +21,7 @@ import {
     BreadcrumbPage,
     BreadcrumbSeparator
 } from '@/components/ui/breadcrumb'
+import {JAPAN_SKI_RESORTS} from "@/lib/constants";
 
 // 定義狀況顯示資料 (簡單版)
 const CONDITION_STYLES: Record<
@@ -45,9 +46,11 @@ const CATEGORY_MAP: Record<string, string> = {
     other: '其他'
 }
 
+const skiResortLabelMap = new Map(JAPAN_SKI_RESORTS.map(resort => [resort.id, resort.label]));
+
 const getResortName = (resortId: string | null) => {
     if (!resortId) return null
-    return resortId.toUpperCase()
+    return skiResortLabelMap.get(resortId) || resortId.replace(/_/g, ' ');
 }
 
 interface ProductPageProps {
@@ -111,8 +114,6 @@ export default async function ProductPage({params}: ProductPageProps) {
     }
 
     return (
-        // ✨ 修改 1: 增加 pt-20 (手機) 和 lg:pt-28 (桌面)，避開 Fixed Header
-        // pb-24 是為了避開手機版底部的 Sticky Footer
         <div className='min-h-screen bg-white pt-20 pb-24 lg:pt-28 lg:pb-10'>
             <div className='container mx-auto px-4 lg:px-6'>
                 {/* 麵包屑 (桌面顯示) */}

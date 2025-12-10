@@ -128,6 +128,7 @@ export default async function BrowsePage({ searchParams }: BrowsePageProps) {
                   condition={product.condition}
                   imageUrl={product.images?.[0] || '/placeholder.png'}
                   brand={product.brand}
+                  ski_resort={product.ski_resort}
                   location={product.location}
                   isFavorited={favoritedProductIds.has(product.id)}
                   isLoggedIn={!!user}
