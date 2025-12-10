@@ -1,5 +1,6 @@
 'use client'
 
+import imageCompression from 'browser-image-compression'
 import {useState, useTransition, useEffect, Suspense} from 'react'
 import {useForm} from 'react-hook-form'
 import {zodResolver} from '@hookform/resolvers/zod'
@@ -236,18 +237,46 @@ function ProductForm() {
         setUploading(true)
 
         try {
-            // A. 先上傳所有「新選的」檔案
-            const uploadedMap = new Map<string, string>() // blobUrl -> supabaseUrl
+            const uploadedMap = new Map<string, string>()
+
+            // 設定壓縮參數
+            const compressionOptions = {
+                maxSizeMB: 0.8,          // 限制最大檔案大小 (MB)
+                maxWidthOrHeight: 1920,  // 限制最大寬高 (px)
+                useWebWorker: true,      // 開多執行緒處理，不卡頓 UI
+                fileType: 'image/webp',  // 強制轉 WebP
+                initialQuality: 0.8      // 品質 80%
+            }
 
             for (const entry of newFiles) {
-                const file = entry.file
-                const fileExt = file.name.split('.').pop()
+                let fileToUpload = entry.file;
+
+                // 進行壓縮
+                try {
+                    // 如果是圖片才壓縮 (防呆)
+                    if (fileToUpload.type.startsWith('image/')) {
+                        // 壓縮後會回傳一個 Blob/File
+                        fileToUpload = await imageCompression(fileToUpload, compressionOptions);
+
+                        // 因為轉成 WebP 了，副檔名建議改一下，不然 Supabase 存 .jpg 但內容是 webp 會怪怪的
+                        // 雖然瀏覽器通常讀得出來，但保持副檔名正確是好習慣
+                        const newName = fileToUpload.name.replace(/\.[^/.]+$/, ".webp");
+                        fileToUpload = new File([fileToUpload], newName, {type: 'image/webp'});
+                    }
+                } catch (err) {
+                    console.error('壓縮失敗，將使用原圖上傳', err);
+                    // 壓縮失敗就維持原圖，不要讓流程斷掉
+                }
+
+                // 檔名處理 (改成 .webp 結尾)
+                const fileExt = 'webp';
                 const fileName = `${Date.now()}-${Math.random().toString(36).substring(2)}.${fileExt}`
                 const filePath = `${fileName}`
 
+                // 上傳 (這裡 fileToUpload 是壓縮過的檔案)
                 const {error: uploadError} = await supabase.storage
                     .from('product-images')
-                    .upload(filePath, file)
+                    .upload(filePath, fileToUpload)
 
                 if (uploadError) throw uploadError
 
