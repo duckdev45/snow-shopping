@@ -134,7 +134,7 @@ export default async function ProfilePage() {
                                             className='absolute inset-0 z-10 flex items-center justify-center rounded-xl bg-gray-900/50 backdrop-blur-[1px]'>
                       <span
                           className='rotate-[-12deg] rounded border-4 border-red-500 px-4 py-2 text-xl font-black text-red-500 opacity-80 shadow-2xl'>
-                        已下架
+                        SOLD
                       </span>
                                         </div>
                                     )}

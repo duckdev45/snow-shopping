@@ -88,6 +88,8 @@ function ProductForm() {
                     price: data.price,
                     category: data.category as any,
                     condition: data.condition as any,
+                    location: data.location,
+                    brand: data.brand || undefined,
                     images: data.images || [], // 舊圖片 URL
                     ski_resort: data.ski_resort || undefined // 回填雪場
                 })
@@ -152,11 +154,11 @@ function ProductForm() {
 
             // 設定壓縮參數
             const compressionOptions = {
-                maxSizeMB: 0.5,          // 限制最大檔案大小 (MB)
-                maxWidthOrHeight: 1280,  // 限制最大寬高 (px)
-                useWebWorker: true,      // 開多執行緒處理，不卡頓 UI
+                maxSizeMB: 1.5,          // 限制最大檔案大小 (MB)
+                maxWidthOrHeight: 1920,  // 限制最大寬高 (px)
+                useWebWorker: true,      // 開多執行緒處理，
                 fileType: 'image/webp',  // 強制轉 WebP
-                initialQuality: 0.7      // 品質 70%
+                initialQuality: 0.85      // 品質 70%
             }
 
             for (const entry of newFiles) {

@@ -8,7 +8,6 @@ import {
     ShieldCheck,
     Snowflake,
     MapPin,
-    AlertCircle
 } from 'lucide-react'
 import {ProductGallery} from '@/app/products/ProductGallery'
 import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar'
@@ -121,10 +120,6 @@ export default async function ProductPage({params}: ProductPageProps) {
                     <Breadcrumb>
                         <BreadcrumbList>
                             <BreadcrumbItem>
-                                <BreadcrumbLink href='/'>首頁</BreadcrumbLink>
-                            </BreadcrumbItem>
-                            <BreadcrumbSeparator/>
-                            <BreadcrumbItem>
                                 <BreadcrumbLink href='/browse'>裝備瀏覽</BreadcrumbLink>
                             </BreadcrumbItem>
                             <BreadcrumbSeparator/>
@@ -136,37 +131,18 @@ export default async function ProductPage({params}: ProductPageProps) {
                 </div>
 
                 <div className='grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-12'>
-                    {/*
-                       🖼️ 左側：圖片區
-                       ✨ 修改 2:
-                       - 調整為 col-span-12 lg:col-span-7
-                       - 手機版不再滿版，改為圓角
-                       - 限制寬度比例 (aspect-[4/3]) 和最大高度 (max-h-[50vh])
-                       - 這樣圖片不會佔據整個手機螢幕，標題能露出來
-                    */}
-                    <div className='col-span-1 lg:col-span-5'>
-                        <div
-                            className='relative mx-auto aspect-[3/4] max-h-[80vh] min-h-[60vh] w-full rounded-2xl border border-gray-100 bg-gray-50 lg:aspect-square lg:max-h-none'>
-                            {/* 狀態遮罩 */}
-                            {product.status !== 'active' && (
+                    {/* 左側：圖片區 */}
+                    <div className='col-span-1 lg:col-span-5 '>
+                        <Suspense
+                            fallback={
                                 <div
-                                    className='absolute inset-0 z-20 flex items-center justify-center bg-black/40 backdrop-blur-sm'>
-                                    <div className='flex flex-col items-center gap-2'>
-                                        <AlertCircle className='h-12 w-12 text-white'/>
-                                        <span className='text-2xl font-bold tracking-widest text-white'>
-                      {product.status === 'sold' ? 'SOLD OUT' : '已下架'}
-                    </span>
-                                    </div>
-                                </div>
-                            )}
-
-                            <Suspense
-                                fallback={
-                                    <div className='h-full w-full animate-pulse bg-gray-100'/>
-                                }>
-                                <ProductGallery images={product.images || []}/>
-                            </Suspense>
-                        </div>
+                                    className='aspect-[3/4] w-full animate-pulse rounded-2xl bg-gray-100 lg:aspect-square'/>
+                            }>
+                            <ProductGallery
+                                images={product.images || []}
+                                status={product.status}
+                            />
+                        </Suspense>
                     </div>
 
                     {/*

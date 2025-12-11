@@ -21,6 +21,8 @@ export const CONDITIONS = [
 export const BRANDS = [
     {id: 'burton', label: 'Burton'},
     {id: 'gentemstick', label: 'Gentemstick'},
+    {id: 'spread', label: 'Spread'},
+    {id: 'yes', label: 'YES.'},
     {id: 'salomon', label: 'Salomon'},
     {id: 'atomic', label: 'Atomic'},
     {id: 'k2', label: 'K2'},

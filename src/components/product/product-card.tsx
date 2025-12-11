@@ -25,6 +25,7 @@ interface ProductCardProps {
     isFavorited?: boolean
     isLoggedIn?: boolean
     showFavoriteButton?: boolean
+    status?: string
 }
 
 const CONDITION_MAP: Record<
@@ -53,6 +54,7 @@ export function ProductCard({
                                 isFavorited = false,
                                 isLoggedIn = false,
                                 showFavoriteButton = true,
+                                status = 'active',
                                 className
                             }: ProductCardProps) {
     const conditionInfo = CONDITION_MAP[condition] || {
@@ -65,6 +67,9 @@ export function ProductCard({
         return skiResortLabelMap.get(skiResortId) || skiResortId.replace(/_/g, ' ');
     }
 
+    // 判斷是否已售出
+    const isSold = status === 'sold'
+
     return (
         <div
             className={cn(
@@ -76,16 +81,27 @@ export function ProductCard({
                 <Link
                     href={`/products/${id}`}
                     className='relative block aspect-square w-full overflow-hidden bg-gray-50'>
+
+                    {/* SOLD 遮罩 */}
+                    {isSold && (
+                        <div
+                            className='absolute inset-0 z-10 flex items-center justify-center rounded-xl bg-gray-900/50 backdrop-blur-[1px]'>
+                      <span
+                          className='rotate-[-12deg] rounded border-4 border-red-500 px-4 py-2 text-xl font-black text-red-500 opacity-80 shadow-2xl'>
+                        SOLD
+                      </span>
+                        </div>
+                    )}
+
                     <Image
                         src={imageUrl || '/placeholder.png'}
                         alt={title}
                         fill
                         className='object-cover transition-transform duration-700 ease-out group-hover:scale-105'
                         sizes='(max-width: 768px) 50vw, (max-width: 1200px) 33vw, 25vw'
-                        /* ✨ 修改 sizes: 告訴瀏覽器手機版這張圖只佔 50vw (一半寬度)，優化效能 */
                     />
 
-                    {/* 左上角：狀態標籤 (縮小字體與內距) */}
+                    {/* 左上角：狀態標籤 */}
                     <div className='absolute top-2 left-2 z-10'>
                         <Badge
                             variant='secondary'
